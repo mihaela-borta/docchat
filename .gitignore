@@ -10,3 +10,6 @@ documents.json
 __pycache__
 
 .vscode
+
+data/
+ask-fsdl/
