@@ -48,11 +48,20 @@ def main(json_path="data/llm-papers.json", collection=None, db=None):
 
     with etl.shared.stub.run():
         chunked_documents = etl.shared.chunk_into(documents, 10)
+
+        chunked_documents_list = list(chunked_documents)
+        if chunked_documents_list:
+            print(f'!!!!! The first rechunked document is of type {type(chunked_documents_list[0])}')
+            print(f'!!!!! The first rechunked document is {chunked_documents_list[0]}')
+        else:
+            print('The generator is empty.')
+
         list(
             etl.shared.add_to_document_db.map(
                 chunked_documents, kwargs={"db": db, "collection": collection}
             )
         )
+
 
 
 @stub.function(

@@ -2,18 +2,20 @@
 ENV_LOADED :=
 
 ifeq ($(ENV), prod)
-    ifneq (,$(wildcard ./.env))
-        include .env
-        export
+	ifneq (,$(wildcard ./.env))
+		include .env
+		@cat .env
+		export
 				ENV_LOADED := Loaded config from .env
     endif
 else
-    ifneq (,$(wildcard ./.env.dev))
-        include .env.dev
-        export
+	ifneq (,$(wildcard ./.env.dev))
+		include .env.dev
+		export
 				ENV_LOADED := Loaded config from .env.dev
-    endif
+	endif
 endif
+
 
 .PHONY: help
 .DEFAULT_GOAL := help
@@ -24,16 +26,17 @@ help: logo ## get a list of all the targets, and their short descriptions
 
 it-all: logo document-store vector-index backend frontend ## runs automated deployment steps
 
-frontend: slash-command ## deploy the Discord bot on Modal
+
+frontend: create-bot-client ## deploy the Discord bot on Modal
 	MODAL_ENVIRONMENT=$(ENV) bash tasks/run_frontend_modal.sh deploy
 
-serve-frontend: slash-command ## run the Discord bot as a hot-reloading "dev" server on Modal
+serve-frontend: create-bot-client ## run the Discord bot as a hot-reloading "dev" server on Modal
 	MODAL_ENVIRONMENT=$(ENV) bash tasks/run_frontend_modal.sh serve
 
-slash-command: frontend-secrets ## register the bot's slash command with Discord
+create-bot-client: frontend-secrets ## register the bot's slash command with Discord
 	@tasks/pretty_log.sh "Assumes you've set up your bot in Discord"
-	MODAL_ENVIRONMENT=$(ENV) modal run bot::create_slash_command
-	@tasks/pretty_log.sh "Slash command registered."
+	MODAL_ENVIRONMENT=$(ENV) modal run bot::start_client
+	@tasks/pretty_log.sh "Sterted bot client."
 
 backend: secrets ## deploy the Q&A backend on Modal
 	@tasks/pretty_log.sh "Assumes you've set up the vector index, see vector-index"
@@ -91,10 +94,13 @@ modal-token: environment ## creates token ID and secret for authentication with 
 
 environment: ## installs required environment for deployment and corpus generation
 	@if [ -z "$(ENV_LOADED)" ]; then \
-			echo "Error: Configuration file not found" >&2; \
-			exit 1; \
-    else \
-			tasks/pretty_log.sh "$(ENV_LOADED)"; \
+		echo "Error: Configuration file not found" >&2; \
+		echo "Current directory: $(shell pwd)"; \
+		echo "Files in the directory:"; \
+		ls -al; \
+		exit 1; \
+	else \
+		tasks/pretty_log.sh "$(ENV_LOADED)"; \
 	fi
 	python -m pip install -qqq -r requirements.txt
 

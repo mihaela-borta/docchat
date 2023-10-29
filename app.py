@@ -33,7 +33,7 @@ image = modal.Image.debian_slim(  # we start from a lightweight linux distro
 # we define a Stub to hold all the pieces of our app
 # most of the rest of this file just adds features onto this Stub
 stub = modal.Stub(
-    name="askfsdl-backend",
+    name="chat-backend",
     image=image,
     secrets=[
         # this is where we add API keys, passwords, and URLs, which are stored on Modal
@@ -51,91 +51,6 @@ stub = modal.Stub(
 
 VECTOR_DIR = vecstore.VECTOR_DIR
 vector_storage = modal.NetworkFileSystem.persisted("vector-vol")
-
-
-@stub.function(
-    image=image,
-    network_file_systems={
-        str(VECTOR_DIR): vector_storage,
-    },
-)
-@modal.web_endpoint(method="GET")
-def web(query: str, request_id=None):
-    """Exposes our Q&A chain for queries via a web endpoint."""
-    import os
-
-    pretty_log(
-        f"handling request with client-provided id: {request_id}"
-    ) if request_id else None
-
-    answer = qanda(
-        query,
-        request_id=request_id,
-        with_logging=bool(os.environ.get("GANTRY_API_KEY")),
-    )
-    return {"answer": answer}
-
-
-@stub.function(
-    image=image,
-    network_file_systems={
-        str(VECTOR_DIR): vector_storage,
-    },
-    keep_warm=1,
-)
-def qanda(query: str, request_id=None, with_logging: bool = False) -> str:
-    """Runs sourced Q&A for a query using LangChain.
-
-    Arguments:
-        query: The query to run Q&A on.
-        request_id: A unique identifier for the request.
-        with_logging: If True, logs the interaction to Gantry.
-    """
-    from langchain.chains.qa_with_sources import load_qa_with_sources_chain
-    from langchain.chat_models import ChatOpenAI
-
-    import prompts
-    import vecstore
-
-    embedding_engine = vecstore.get_embedding_engine(allowed_special="all")
-
-    pretty_log("connecting to vector storage")
-    vector_index = vecstore.connect_to_vector_index(
-        vecstore.INDEX_NAME, embedding_engine
-    )
-    pretty_log("connected to vector storage")
-    pretty_log(f"found {vector_index.index.ntotal} vectors to search over")
-
-    pretty_log(f"running on query: {query}")
-    pretty_log("selecting sources by similarity to query")
-    sources_and_scores = vector_index.similarity_search_with_score(query, k=3)
-
-    sources, scores = zip(*sources_and_scores)
-
-    pretty_log("running query against Q&A chain")
-
-    llm = ChatOpenAI(model_name="gpt-4", temperature=0, max_tokens=256)
-    chain = load_qa_with_sources_chain(
-        llm,
-        chain_type="stuff",
-        verbose=with_logging,
-        prompt=prompts.main,
-        document_variable_name="sources",
-    )
-
-    result = chain(
-        {"input_documents": sources, "question": query}, return_only_outputs=True
-    )
-    answer = result["output_text"]
-
-    if with_logging:
-        print(answer)
-        pretty_log("logging results to gantry")
-        record_key = log_event(query, sources, answer, request_id=request_id)
-        if record_key:
-            pretty_log(f"logged to gantry with key {record_key}")
-
-    return answer
 
 
 @stub.function(
@@ -180,7 +95,6 @@ def drop_docs(collection: str = None, db: str = None):
 def log_event(query: str, sources, answer: str, request_id=None):
     """Logs the event to Gantry."""
     import os
-
     import gantry
 
     if not os.environ.get("GANTRY_API_KEY"):
@@ -206,7 +120,7 @@ def log_event(query: str, sources, answer: str, request_id=None):
     return record_key
 
 
-def prep_documents_for_vector_storage(documents):
+def prep_documents_for_vector_storage_pdf(documents):
     """Prepare documents from document store for embedding and vector storage.
 
     Documents are split into chunks so that they can be used with sourced Q&A.
@@ -220,7 +134,10 @@ def prep_documents_for_vector_storage(documents):
         chunk_size=500, chunk_overlap=100, allowed_special="all"
     )
     ids, texts, metadatas = [], [], []
-    for document in documents:
+    pretty_log("🦜 DOCUMENT 🦜")
+    print(type(documents[0]))   
+    print(documents[0])
+    for document in documents[:1]:
         text, metadata = document["text"], document["metadata"]
         doc_texts = text_splitter.split_text(text)
         doc_metadatas = [metadata] * len(doc_texts)
@@ -229,6 +146,38 @@ def prep_documents_for_vector_storage(documents):
         metadatas += doc_metadatas
 
     return ids, texts, metadatas
+
+
+def prep_documents_for_vector_storage(documents):
+    """Prepare documents from document store for embedding and vector storage.
+
+    Documents are split into chunks so that they can be used with sourced Q&A.
+
+    Arguments:
+        documents: A list of LangChain.Documents with text, metadata, and a hash ID.
+    """
+    from langchain.text_splitter import LatexTextSplitter
+
+    text_splitter = LatexTextSplitter.from_tiktoken_encoder(
+            chunk_size=500, chunk_overlap=100, allowed_special="all"
+        )
+
+    ids, texts, metadatas = [], [], []
+    pretty_log("🦜 DOCUMENT 🦜")
+    print(type(documents[0]))   
+    print(documents[0])
+    i = 0
+    for document in documents:
+        text, metadata = document["text"], document["metadata"]
+        doc_texts = text_splitter.split_text(text)
+        doc_metadatas = [metadata] * len(doc_texts)
+        ids += [metadata.get("sha256")] * len(doc_texts)
+        texts += doc_texts
+        metadatas += doc_metadatas
+        i+=1
+
+    return ids, texts, metadatas
+
 
 
 @stub.function(
@@ -243,19 +192,6 @@ def cli(query: str):
     print(answer)
 
 
-web_app = FastAPI(docs_url=None)
-
-
-@web_app.get("/")
-async def root():
-    return {"message": "See /gradio for the dev UI."}
-
-
-@web_app.get("/docs", response_class=RedirectResponse, status_code=308)
-async def redirect_docs():
-    """Redirects to the Gradio subapi docs."""
-    return "/gradio/docs"
-
 
 @stub.function(
     image=image,
@@ -264,56 +200,90 @@ async def redirect_docs():
     },
     keep_warm=1,
 )
-@modal.asgi_app(label="askfsdl-backend")
-def fastapi_app():
-    """A simple Gradio interface for debugging."""
-    import gradio as gr
-    from gradio.routes import App
+def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
+    """Runs sourced Q&A for a query using LangChain.
 
-    def chain_with_logging(*args, **kwargs):
-        return qanda(*args, with_logging=True, **kwargs)
+    Arguments:
+        query: The query to run Q&A on.
+        request_id: A unique identifier for the request.
+        with_logging: If True, logs the interaction to Gantry.
+    """
+    from langchain.chains.qa_with_sources import load_qa_with_sources_chain
+    from langchain.chat_models import ChatOpenAI
 
-    inputs = gr.TextArea(
-        label="Question",
-        value="What is zero-shot chain-of-thought prompting?",
-        show_label=True,
+    import prompts
+    import vecstore
+
+    embedding_engine = vecstore.get_embedding_engine(allowed_special="all")
+
+    pretty_log("connecting to vector storage")
+    vector_index = vecstore.connect_to_vector_index(
+        vecstore.INDEX_NAME, embedding_engine
     )
-    outputs = gr.TextArea(
-        label="Answer", value="The answer will appear here.", show_label=True
-    )
+    pretty_log("connected to vector storage")
+    pretty_log(f"found {vector_index.index.ntotal} vectors to search over")
 
-    interface = gr.Interface(
-        fn=chain_with_logging,
-        inputs=inputs,
-        outputs=outputs,
-        title="Ask Questions About The Full Stack.",
-        description="Get answers with sources from an LLM.",
-        examples=[
-            "What is zero-shot chain-of-thought prompting?",
-            "Would you rather fight 100 LLaMA-sized GPT-4s or 1 GPT-4-sized LLaMA?",
-            "What are the differences in capabilities between GPT-3 davinci and GPT-3.5 code-davinci-002?",  # noqa: E501
-            "What is PyTorch? How can I decide whether to choose it over TensorFlow?",
-            "Is it cheaper to run experiments on cheap GPUs or expensive GPUs?",
-            "How do I recruit an ML team?",
-            "What is the best way to learn about ML?",
-        ],
-        allow_flagging="never",
-        theme=gr.themes.Default(radius_size="none", text_size="lg"),
-        article="# GitHub Repo: https://github.com/the-full-stack/ask-fsdl",
-    )
+    pretty_log(f"running on query: {query}")
+    pretty_log("selecting sources by similarity to query")
+    sources_and_scores = vector_index.similarity_search_with_score(query, k=3)
 
-    interface.dev_mode = False
-    interface.config = interface.get_config_file()
-    interface.validate_queue_settings()
-    gradio_app = App.create_app(
-        interface, app_kwargs={"docs_url": "/docs", "title": "ask-FSDL"}
+    sources, scores = zip(*sources_and_scores)
+
+    pretty_log("running query against Q&A chain")
+
+    llm = ChatOpenAI(temperature=0, max_tokens=256) #model_name="gpt",
+    chain = load_qa_with_sources_chain(
+        llm,
+        chain_type="stuff",
+        verbose=with_logging,
+        prompt=prompts.main,
+        document_variable_name="sources",
     )
 
-    @web_app.on_event("startup")
-    async def start_queue():
-        if gradio_app.get_blocks().enable_queue:
-            gradio_app.get_blocks().startup_events()
+    result = chain(
+        {"input_documents": sources, "question": query}, return_only_outputs=True
+    )
+    answer = result["output_text"]
 
-    web_app.mount("/gradio", gradio_app)
+    if with_logging:
+        print(answer)
+        pretty_log("logging results to gantry")
+        record_key = log_event(query, sources, answer, request_id=request_id)
+        if record_key:
+            pretty_log(f"logged to gantry with key {record_key}")
 
-    return web_app
+    return answer
+
+
+@stub.function(
+    image=image,
+    network_file_systems={
+        str(VECTOR_DIR): vector_storage,
+    },
+)
+@modal.web_endpoint(method="POST")
+def web(request:dict):
+    """Exposes our Q&A chain for queries via a web endpoint.
+    The name of this endpoint should match the MODAL_ENDPOINT_NAME environment variable as it is pick-up by the frontend.
+    """
+    import os
+
+    query = request['query']
+    pretty_log(f"Received query: {query}")
+    
+    request_id = request['request_id'] if 'request_id' in request.keys() else None
+
+    if request_id:
+        pretty_log(
+        f"handling request with client-provided id: {request_id}"
+    )
+    else:
+        pretty_log(
+        f"handling request: {query}"
+    )
+    answer = qanda(
+        query,
+        request_id=request_id
+    )
+
+    return {"query": query, "answer": answer}

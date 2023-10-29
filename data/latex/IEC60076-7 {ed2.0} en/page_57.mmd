@@ -1,0 +1,21 @@
+IEC 60076-7:2018 @ IEC 2018 - 55 -
+
+\begin{tabular}{c} Anne F \\ (informative) \\ \end{tabular}
+
+### General
+
+As defined in 8.2.3, the first gradient \(\Delta\theta_{\text{h}1}\) (Equations (7) and (13) with thermal constants \(k_{21}\) and \(k_{22}\)) represents the fundamental hot-spot temperature rise, before the effect of changing oil flow past the hot-spot is taken into account. The second gradient \(\Delta\theta_{\text{h}2}\) (Equations (8) and (14) with parameters \(k_{21}\) - 1 and \(k_{22}\)) represents the varying rate of oil flow past the hot-spot, a phenomenon which changes much more slowly. The combined effect of these two terms is to account for the fact that a sudden rise in load current may cause an otherwise unexpectedly high peak in the hot-spot temperature rise, very soon after the sudden load change. Similarly, thermal constant \(k_{11}\) in Equations (5) and (11) acts as a correction factor for the top-oil time constant, taking into account the fact that the time constant is being affected in a length of the time by the viscosity change.
+
+The procedure to estimate these thermal constants from a prolonged heat-run test during the "no-load loss + load loss" period is defined in Clause F.2. The thermal constant estimation procedure from service data is defined in [18].
+
+The model in this document represents the traditional way of modelling based on many years of experience [31, 33, 34, 35, 36, 37, 38, 39], and it has been verified under different operational conditions [18, 21], providing satisfactory hot-spot temperature estimates. Being based on constant parameters the model provides exponential response for predefined thermal processes, and as such its further development in this form could be limited. However, due to extreme simplicity in application in the daily life of an engineer, it is still considered appropriate.
+
+On the other hand, it is possible to provide complete analytical solution for these physical processes considering all system variables (oil viscosity, loss change with temperature, etc.), as is partly illustrated in Clause F.3. This approach would demand a certain change in modelling practice, for example deviation from traditional \(x\) and \(y\) exponents.
+
+### Thermal constant estimation: experimental approach
+
+The thermal constant \(k_{11}\) should be estimated for the transient top-oil rise temperature curve obtained during the test period with total losses as follows (see [32]).
+
+1. Define function \(f_{1}(t)\), which describes the relative increase of the top-oil temperature rise according to the unit of the steady-state value: \[f_{1}\big{(}t\big{)}=\big{(}1-e^{\big{(}-t\big{)}(k_{11}\times r_{0})}\big{)}\] (F.1)
+2. Obtain measured relative increase of the top-oil temperature rise as per unit of the steady state value, \(Mf_{1j}\), for the complete test period: \[Mf_{1j}=\frac{M\theta_{\text{o}j}-M\theta_{\text{a}j}}{\Delta\theta_{\text{ o}r}}.\] (F.2)
+3. Perform nonlinear regression by using the guess-error approach (alternatively curve fitting or optimization software also could be used) to find the constant to minimize the sum of squares of differences between \(f_{1j}\) and \(Mf_{1j}\):

@@ -1,0 +1,34 @@
+#### Short-circuit withstand requirements
+
+Refer to 7.4.3.
+
+#### Voltage limitations
+
+Refer to 7.4.4.
+
+## 8 Determination of temperatures
+
+### Hot-spot temperature rise in steady state
+
+#### General
+
+To be strictly accurate, the hot-spot temperature should be referred to the adjacent oil temperature. This is assumed to be the top-oil temperature inside the winding. Measurements have shown that the top-oil temperature inside a winding might be, dependent on the cooling, up to 15 K higher than the mixed top-oil temperature inside the tank.
+
+For most transformers in service, the top-oil temperature inside a winding is not precisely known. On the other hand, for most of these units, the top-oil temperature at the top of the tank is well known, either by measurement or by calculation.
+
+The calculation rules in this document are based on the following:
+
+* \(\Delta\theta_{\text{nr}}\), the top-oil temperature rise in the tank above ambient temperature at rated losses [K];
+* \(\Delta\theta_{\text{hr}}\), the hot-spot temperature rise above top-oil temperature in the tank at rated current [K].
+
+The parameter \(\Delta\theta_{\text{hr}}\) can be defined either by direct measurement during a heat-run test or by a calculation method validated by direct measurements.
+
+NOTE The methods, principles and calculation procedures given in 8.1.2, 8.1.3, 8.1.4 and Annex D are ultimately valid for the converter transformers for HVDC application, however, with the necessary consideration of the effect of harmonics on the transformer thermal performance with a reference to a specific converter operating point and specific system conditions.
+
+#### Calculation of hot-spot temperature rise from normal heat-run test data
+
+A thermal diagram is assumed, as shown in Figure 6, on the understanding that such a diagram is the simplification of a more complex distribution. The assumptions made in this simplification are as follows.
+
+* The oil temperature inside the tank increases linearly from bottom to top, whatever the cooling mode.
+* As a first approximation, the temperature rise of the conductor at any position up the winding is assumed to increase linearly, parallel to the oil temperature rise, with a constant difference \(g_{\text{r}}\) between the two straight lines (\(g_{\text{r}}\) being the difference between the winding average temperature rise by resistance and the average oil temperature rise in the tank).
+* The hot-spot temperature rise is higher than the temperature rise of the conductor at the top of the winding as described in 8.1.2b), because allowance has to be made for the increase in stray losses, for differences in local oil flows and for possible additional paper on the conductor. To take into account these non-linearities, the difference in temperature between the hot-spot and the top-oil in tank is made equal to \(H\times g_{\text{r}}\), that is, \(\Delta\theta_{\text{hr}}=H\times g_{\text{r}}\).

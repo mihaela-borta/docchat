@@ -1,0 +1,18 @@
+particular transformer application (loaded tertiary winding, small transformers, etc.), and based on this should decide on the total sensor number per winding and per phase.
+
+NOTE By leakage flux is here meant the maximum unidirectional flux (crest value), which is the integral of the absolute values of the axial flux densities between two intersections with the \(x\)-axis. A transformer might have several such integrals and in this case the maximum of these integrals is considered. An approximate formula for this maximum leakage flux is \(1,8\times Z\times 5^{0.5}\)[18], where \(Z\) is the short-circuit impedance in per cent and \(S\) is the intrinsic rated power per wound limb in MVA. For auto-connected transformers, \(Z\) and \(S\) refer to the intrinsic MVA value and not to the MVA transformed. \(S\) is therefore equal to the nameplate rated power, multiplied by \(\alpha\), i.e. the auto factor. The auto factor, \(\alpha\), is equal to: (primary voltage - secondary voltage) / primary voltage. \(Z\) is equal to the nameplate short-circuit impedance divided by the auto factor.
+
+EXAMPLE For single-phase 550/230 kV auto-connected transformer with the throughput rating \(S\) = 334 MVA, the corresponding impedance \(Z\) = 15 %, and the auto factor \(\alpha\) = (550 - 230)/550 = 0,58, the leakage flux is approximately \([1,8\times(0.58\times 334)^{0.5}\times(15/0.58)]\) = 650 mWb.
+
+In shell type transformers, the fibre optic sensors should be located in the coil edges (Figure 8) and in the brazed connections between coils.
+
+If it is not possible to install the fibre optic sensor in the expected hot-spot location, for example due to high voltage stress, then the installation can be made at a safer location. Consequently, the proposed alternative measuring location and the corresponding correction procedure should be further discussed between purchaser and manufacturer.
+
+Although Table 2 comprises temperature limits for core and structural parts, such temperature rises are not measured in a normal temperature rise test. Those temperature rises are normally estimated by calculation. The manufacturers should install thermal sensors in these parts in selected transformers to calibrate their calculation methods. Manufactures of fibre optic probes are producing insulation kits for this purpose, but also robust thermocouples or RTDs offer a good alternative. The thermocouples can be installed permanently in the transformer in such a way that they do not reduce the voltage strength and that they remain inside the transformer during its life. Thermocouples inside a transformer should be twisted to eliminate the effect of leakage flux impinging between the two thermocouple strands and causing an extra induced voltage between the two thermocouple metals. If specified such special test (i.e. the temperature rise of the core and structural part during the no-load test) should be discussed during the design review and the following parameters should be defined:
+
+* cooling conditions;
+* test duration;
+* supply voltage;
+* temperature limits.
+
+Figure 8: Coil edges, where the sensors should be located in the edge with the higher calculated temperature rise

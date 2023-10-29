@@ -1,5 +1,13 @@
 #!/bin/bash
 # shellcheck source=tasks/pretty_log.sh
+source /home/mi/git_repos/ask-fsdl/.env.dev
+
+echo "MONGODB_USER: $MONGODB_USER"
+echo "MONGODB_HOST: $MONGODB_HOST"
+echo "MONGODB_PASSWORD: $MONGODB_PASSWORD"
+echo "OPENAI_API_KEY: $OPENAI_API_KEY"
+echo "GANTRY_API_KEY: $GANTRY_API_KEY"
+
 set -euo pipefail
 
 GANTRY_API_KEY=${GANTRY_API_KEY:-""}

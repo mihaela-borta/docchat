@@ -50,11 +50,14 @@ if [ $drop ]; then
   modal run app.py::drop_docs --db "$db" --collection "$collection"
 fi
 
-pretty_log "Extracting video transcripts"
-modal run etl/videos.py --json-path data/videos.json --db "$db" --collection "$collection"
+#pretty_log "Extracting video transcripts"
+#modal run etl/videos.py --json-path data/videos.json --db "$db" --collection "$collection"
 
-pretty_log "Extracting Markdown lectures"
-modal run etl/markdown.py --json-path data/lectures-2022.json --db "$db" --collection "$collection"
+#pretty_log "Extracting Markdown lectures"
+#modal run etl/markdown.py --json-path data/lectures-2022.json --db "$db" --collection "$collection"
 
-pretty_log "Extracting paper PDFs"
-modal run etl/pdfs.py --json-path data/llm-papers.json --db "$db" --collection "$collection"
+#pretty_log "Extracting paper PDFs"
+#modal run etl/pdfs.py --json-path data/llm-papers.json --db "$db" --collection "$collection"
+
+pretty_log "Loading Latex documents"
+modal run etl/latex.py --dir-path data/latex --db "$db" --collection "$collection"

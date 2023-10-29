@@ -1,0 +1,16 @@
+## Example of calculating and presenting overload data
+
+Annex K contains an example of how to calculate and present the overload data with the equations presented in this document.
+
+Table K.1 gives, as an example, some characteristics that might be used.
+
+With a spreadsheet programme, a 24 h period is created, with the time-scale in minutes. Equations (10) to (17) are used to calculate for each minute the hot-spot temperature as a function of the load. The initial conditions for \(\Delta\theta_{\text{oli}}\) and \(\Delta\theta_{\text{hi1}}\), \(\Delta\theta_{\text{hi2}}\) can be determined with \(t\rightarrow\infty\).
+
+When the hot-spot temperature is known, the relative ageing can be calculated with Equation (2). With Equation (4) the loss of life, expressed in "normal" days, can be calculated by dividing the sum of the relative ageing of each minute by 1440.
+
+For example, consider a case with a pre-load (\(K_{1}\)) of 0,8, then an overload \(K_{2}\) = 1,4 during 30 min and return to \(K_{1}\) = 0,8 for the time remaining (1410 min). The transformer is OF cooled; therefore, the example characteristics of Table H.1 (OF) are used.
+
+\begin{table}
+\begin{tabular}{|l c|c|c|c|c|c|} \hline \multirow{2}{*}{**Characteristic**} & \multicolumn{3}{c|}{**Small**} & \multicolumn{3}{c|}{**Large and medium power transformers**} \\ \cline{3-7}  & \multicolumn{2}{c|}{**ONAN**} & \multicolumn{2}{c|}{**ONAN**} & \multicolumn{2}{c|}{**ONAF**} & \multicolumn{2}{c|}{**OF**} & \multicolumn{1}{c|}{**OD**} \\ \hline Oil exponent & \(x\) & 0,8 & 0,8 & 0,8 & 1,0 & 1,0 \\ Winding exponent & \(y\) & 1,6 & 1,3 & 1,3 & 1,3 & 2,0 \\ Loss ratio & \(R\) & 5 & 6 & 6 & 6 & 6 \\ Hot-spot factor & \(H\) & 1,1 & 1,3 & 1,3 & 1,3 & 1,3 \\ Oil time constant & \({}^{\tau_{\text{o}}}\) & 180 & 210 & 150 & 90 & 90 \\ Winding time constant & \({}^{\tau_{\text{w}}}\) & 4 & 10 & 7 & 7 & 7 \\ \hline Ambient temperature & \(\theta_{\text{a}}\) & 20 & 20 & 20 & 20 & 20 \\ Hot-spot temperature & \(\theta_{\text{h}}\) & 98 & 98 & 98 & 98 & 98 \\ Hot-spot to top-oil (in tank) gradient & \(\Delta\theta_{\text{hr}}\) & 23 & 26 & 26 & 22 & 29 \\ Average oil temperature rise \({}^{\text{a}}\) & \(\Delta\theta_{\text{omr}}\) & 44 & 43 & 43 & 46 & 46 \\ Top-oil (in tank) temperature rise & \(\Delta\theta_{\text{or}}\) & 55 & 52 & 52 & 56 & 49 \\ Bottom oil temperature rise \({}^{\text{a}}\) & \(\Delta\theta_{\text{hr}}\) & 33 & 34 & 34 & 36 & 43 \\ \hline \(k_{11}\) & & 1,0 & 0,5 & 0,5 & 1,0 & 1,0 \\ \(k_{21}\) & & 1,0 & 2,0 & 2,0 & 1,3 & 1,0 \\ \(k_{22}\) & & 2,0 & 2,0 & 2,0 & 1,0 & 1,0 \\ \hline \multicolumn{7}{l}{* Average oil temperature rise and bottom oil temperature rise are given for information only.} \\ \end{tabular}
+\end{table}
+Table K.1: Example characteristics related to the loadability of transformers

@@ -30,6 +30,7 @@ def add_to_document_db(documents_json, collection=None, db=None):
     requesting, CHUNK_SIZE = [], 250
 
     for document in documents_json:
+        #print(f'Document to be added to MongoDB: type: {type(document)}')
         requesting.append(InsertOne(document))
 
         if len(requesting) >= CHUNK_SIZE:
