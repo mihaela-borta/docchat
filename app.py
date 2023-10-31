@@ -33,7 +33,7 @@ image = modal.Image.debian_slim(  # we start from a lightweight linux distro
 # we define a Stub to hold all the pieces of our app
 # most of the rest of this file just adds features onto this Stub
 stub = modal.Stub(
-    name="chat-backend",
+    name="docchat-backend",
     image=image,
     secrets=[
         # this is where we add API keys, passwords, and URLs, which are stored on Modal
@@ -187,10 +187,9 @@ def prep_documents_for_vector_storage(documents):
     },
 )
 def cli(query: str):
-    answer = qanda(query, with_logging=False)
+    answer = qanda.remote(query, with_logging=False)
     pretty_log("🦜 ANSWER 🦜")
     print(answer)
-
 
 
 @stub.function(

@@ -55,7 +55,7 @@ stub = Stub(
 
 def start_client():
     key = os.environ.get("DISCORD_AUTH")
-    pretty_log('Starting Discord client')
+    pretty_log('Starting Discord client')   
 
     client.run(key)
 
@@ -63,13 +63,14 @@ def start_client():
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
-    asyncio.get_running_loop().create_task(background_task())
+    asyncio.get_running_loop().create_task(background_task.remote())    # This makes issues.
 
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
     if isinstance(message.channel, discord.channel.DMChannel) or (client.user and client.user.mentioned_in(message)):
+        pretty_log(f'RECEIVED MESSAGE: {message.content} from {message.author.name}')
         await queue.put(message)
 
 @stub.function()
@@ -100,6 +101,8 @@ def generate_backend_url():
         raise ValueError("One or more required environment variables are not set.")
     
     url = f"https://{MODAL_USER_NAME}-{MODAL_ENVIRONMENT}--{MODAL_BACKEND_NAME}-{MODAL_ENDPOINT_NAME}.modal.run"
+    
+    pretty_log(f'Returning backend URL: {url}')
     return url
 
 
