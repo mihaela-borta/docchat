@@ -1,0 +1,44 @@
+## 3 Requirement specifications
+
+Based on the introduction and related research, a set of requirement specifications have been made for the design of the prototype. The prototype should include the following:
+
+* A real-life scenario where selective attention becomes challenging for people with hearing impairment.
+* Both a target sound source and multiple distracting sound sources.
+* Implementation of Steam Audio for auralization of dry audio (i.e., conversations) recorded in an anechoic chamber.
+* A visual environment modeled with lifelike animated characters and 3D objects to achieve a high degree of realism.
+* Interesting distracting auditory objects to grab the attention of the listener.
+* Measures to track the user's behavior and visual attention in the scene.
+
+## 4 Iteration I
+
+### Design
+
+Inspired by [8], the prototype will include a cafe scene since that would be a common place for most people to experience challenges with selective attention. In this scenario, the listener can have many competing sound sources, like different conversations close to the listener and some louder sound events (e.g., glass breaking). To ensure that the listener would have an obvious sound source that they were supposed to listen to, it was decided to use the same approach as in [8] (see Section 2.4) and have a waiter approach the listener.
+
+### Implementation
+
+The VR experience was developed using Unity with the Meta Quest Pro headset1. The Quest Pro's eye-tracking abilities were used for logging every object the user looked at at a 0.1-second interval. The scene's characters and animations were downloaded from Adobe Mixamo2. The mouths of the waiter and the characters close to the listener were lip-synced utilizing Oculus' lip sync package for Unity3. The lip sync requires the face of the 3D characters to have 25 predetermined blend shapes. Each blend shape was modeled using Adobe Fuse4 and later merged using Blender5.
+
+Footnote 1: [https://www.meta.com/dk/en/quest/quest-pro/](https://www.meta.com/dk/en/quest/quest-pro/)
+
+Footnote 2: [https://www.mixamo.com](https://www.mixamo.com)
+
+Footnote 3: [https://developer.oculus.com/documentation/unity/audio-ovrlipsync-unity/](https://developer.oculus.com/documentation/unity/audio-ovrlipsync-unity/)
+
+#### 4.2.1 Sound
+
+The Steam Audio Engine was used to implement spatial audio in the scene. Generating an individualized HRTF for each participant would be too time-consuming, so the built-in generalized HRTF from Steam Audio was used. As mentioned in Section 2.1, a non-individual HRTF should be feasible. Steam Audio includes an implementation for ray-based geometrical acoustics, enabling game objects in Unity to be tagged with a geometrical material. The material includes a scattering coefficient and coefficients for absorption and transmission. When tagging an object, it will absorb, reflect, and transmit sound in the 3D scene. Based on the material data, Steam Audio generates reverberation based on the listeners' (i.e., the cameras) position and rotation. The used coefficient in the scene is based on the presets from the Steam Audio package.
+
+The background noises in the scene, which include noises from a coffee machine, an air conditioner, and rain outside, were downloaded from Freesound6. The conversations in the scene were recorded in an anechoic chamber with an SM7B microphone. All recordings have been normalized using Logic Pro X, for each recording to have similar loudness before being spatialized and attenuated based on the distance to the listener by Steam Audio in Unity.
+
+Footnote 6: [https://freesound.org/](https://freesound.org/)
+
+#### 4.2.2 Final Scene
+
+The locations of the sources and the receiver in the scene were defined to be similar to the source and receiver locations in the bar scene in Par et al. [8]. When the listener starts the scene, they hear conversations close to them to their left and to their right, and other background noises around them like distant conversations, sounds from cut-lery and a coffee machine. Then, a waiter approaches them and speaks to them about the menu until the scene is over.
+
+### Evaluation
+
+When the first iteration had been implemented, a usability test was conducted on 5 participants in an anechoic chamber. Each participant sat in a stationary chair and was asked to wear the VR headset. The goal of the test was to get feedback on the achieved realism in both the audio and the visuals. The participants were asked to pay specific attention to the sound environment and asked to see if they could tune into the different conversations. The scene was
+
+Figure 2: The waiter scenario from [8]

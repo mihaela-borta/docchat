@@ -1,0 +1,49 @@
+## IV Relationships Between Beamforming and Noise Cancellation
+
+It is instructive to analyze the relationship between the beamforming and noise cancelling units of decoupled BF-NC structures. To that end, note that the output SIR may be computed for only the desired-signal beamformer, prior to the noise canceller:
+
+\[\mathrm{SIR}_{\mathrm{BF}}=\frac{\mathbf{W}_{d}^{H}\mathbf{\Phi}_{\mathrm{XX}} \mathbf{|}_{\mathrm{signal}}\mathbf{W}_{d}}{\mathbf{W}_{d}^{H}\mathbf{\Phi}_{ \mathrm{XX}}\mathbf{|}_{\mathrm{interference}}\mathbf{W}_{d}} \tag{18}\]
+
+where \(\mathbf{\Phi}_{\mathrm{XX}}\mathbf{|}_{\mathrm{signal}}\) is the signal component of the array CSD matrix and \(\mathbf{\Phi}_{\mathrm{XX}}\mathbf{|}_{\mathrm{interference}}\) is the interference component of the CSD matrix, and the signal and interference are assumed to be temporally uncorrelated. The SIR gain of the front-end beamformer is, thus
+
+\[\mathrm{G}_{\mathrm{BF}}^{\mathrm{SIR}}=\mathrm{SIR}_{\mathrm{BF}}-\mathrm{SIR }_{\mathrm{array}} \tag{19}\]
+
+where \(\mathrm{SIR}_{\mathrm{array}}\) is the SIR at the array.
+
+The output SIR produced by the overall BF-NC structure is
+
+\[\mathrm{SIR}_{\mathrm{BF}\mathbf{=}\mathrm{NC}}=\frac{\mathbf{W}_{\mathrm{ effective}}^{H}\mathbf{\Phi}_{\mathrm{XX}}\mathbf{|}_{\mathrm{signal}}\mathbf{W}_{\mathrm{ effective}}}{\mathbf{W}_{\mathrm{effective}}^{H}\mathbf{\Phi}_{\mathrm{XX}} \mathbf{|}_{\mathrm{interference}}\mathbf{W}_{\mathrm{effective}}}, \tag{20}\]
+
+It easily follows that the SIR gain of the noise canceller is
+
+\[\mathrm{G}_{\mathrm{NC}}^{\mathrm{SIR}}=\mathrm{SIR}_{\mathrm{BF}\mathbf{=} \mathrm{NC}}\mathbf{-}\mathbf{\Sigma}\mathrm{IR}_{\mathrm{BF}} \tag{21}\]
+
+while the SIR gain of the decoupled BF-NC is
+
+\[\mathrm{G}_{\mathrm{BF}\mathbf{-}\mathrm{NC}}^{\mathrm{SIR}}=\mathrm{SIR}_{ \mathrm{BF}\mathbf{-}\mathrm{NC}}-\mathrm{SIR}_{\mathrm{array}}. \tag{22}\]
+
+We may do the same for the directivity index (DI). The directivity offered by the front-end beamformer alone is given by
+
+\[DI_{\mathrm{BF}}=\frac{\left|\mathbf{W}_{d}^{H}\mathbf{d}_{\mathrm{s}} \right|^{2}}{\mathbf{W}_{d}^{H}\mathbf{\Gamma}_{\mathrm{ml}}\mathbf{|}_{ \mathrm{diffuse}}\mathbf{W}_{d}} \tag{23}\]
+
+where \(\mathbf{\Gamma}_{\mathrm{ml}}\mathbf{|}_{\mathrm{diffuse}}\) is the coherence matrix of a diffuse noise field.
+
+The DI of the decoupled BF-NC is
+
+\[DI_{\mathrm{BF}\mathbf{=}\mathrm{NC}}=\frac{\left|\mathbf{W}_{\mathrm{effective }}^{H}\mathbf{d}_{\mathrm{s}}\right|^{2}}{\mathbf{W}_{\mathrm{effective}}^{H} \mathbf{\Gamma}_{\mathrm{ml}}\mathbf{|}_{\mathrm{diffuse}}\mathbf{W}_{\mathrm{ effective}}}. \tag{24}\]
+
+Finally, the white noise gain (WNG) offered by the front-end beamformer is
+
+\[WNG_{\mathrm{BF}}=\frac{\left|\mathbf{W}_{d}^{H}\mathbf{d}_{\mathrm{s}} \right|^{2}}{\mathbf{W}_{d}^{H}\mathbf{W}_{d}} \tag{25}\]
+
+while the WNG of the decoupled BF-NC is
+
+\[WNG_{\mathrm{BF}\mathbf{=}\mathrm{NC}}=\frac{\left|\mathbf{W}_{\mathrm{effective }}^{H}\mathbf{d}_{\mathrm{s}}\right|^{2}}{\mathbf{W}_{\mathrm{effective}}^{H} \mathbf{W}_{\mathrm{effective}}\mathbf{W}_{\mathrm{effective}}}, \tag{26}\]
+
+Examination of the relationships between the quantities (19) and (21), (23) and (24), and (25) and (26) sheds light into the inter-operation of the beamforming and noise cancelling components.
+
+The SIR gains of the beamforming and noise cancelling units have been determined for various signal-interference spatial separations. The decoupled structure defined by (14) and (15) is assumed to compute the SIR gains. An \(M=4\) element, uniformly-spaced, linear array with an inter-element spacing of 0.046 m is assumed. The desired signal source is located at broadside. Both the signal and interference are assumed to be white with a unit PSD across the frequency range of interest. There is a perfect correspondence between array steering and the signals' directions of arrival (DOA). A spatially uncorrelated Gaussian noise field with a SNR of 20 dB is assumed. The sampling frequency is 8 kHz, and the results are averaged over the 300 Hz-3.7 kHz frequency band. Adaptation is performed in the absence of the desired signal. Fig. 3 shows the SIR relationships. For the SIR gain of the noise canceller, two curves are shown: one curve taking into account the presence of desired signal components in the reference noise canceller input, and the other ignoring this presence (a rather artificial curve). In the figure, BF refers to beamformer and NC to the noise canceller.
+
+The curve clearly illustrates the opposing nature of the BF and NC units. While the SIR gain of the beamformer increases with increased signal-interference separation, the SIR gain of the noise canceller generally decreases with increased separation. A beamformer is a structure that thrives on spatial separation between desired signal and interference sources. Since the amount of interference leaked through the desired signal beamformer decreases as the interference source moves away from the signal look-direction, the SIR at the desired signal beamformer output increases for increased signal-interference separation. On the other hand, a noise canceller is a purely temporal device that relies on correlation between its primary and reference inputs to convert the adaptive filter input to the desired signal. Intuitively, the correlation between beamformer outputs decreases as the steering directions of the beamformers move
+
+Fig. 3: SIR relationships between beamformer and noise canceller.

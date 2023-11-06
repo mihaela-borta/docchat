@@ -1,0 +1,15 @@
+\(b_{z}\) bits. Due to digitization, the signal that will be processed (\(\bar{x}\)) is the true signal (\(x\)) plus some quantization noise (\(n_{x}\)). Similarly for the weights. Therefore,
+
+\[\bar{x}=x+n_{x}, \tag{61}\] \[\bar{w}=w+n_{w}. \tag{62}\]
+
+In the beamforming approach we are multiplying these two quantized values. The output \(\bar{y}=\bar{w}^{*}\bar{x}\).
+
+\[\bar{y} = \bar{w}^{*}\bar{x} \tag{63}\] \[= (w+n_{w})^{*}(x+n_{x})\] (64) \[= w^{*}x+n_{w}^{*}x+w^{*}n_{x}+n_{w}^{*}n_{x}\]
+
+Representing as \(\sigma_{x}^{2}\) the average power in the signal \(x\) and \(\sigma_{w}^{2}=E(|w|^{2})\), the useful power in the output signal \(y\) is \(\sigma_{x}^{2}\sigma_{w}^{2}\). Similarly, if \(\sigma_{nx}^{2}\) and \(\sigma_{nw}\) are the powers in the quantization noise terms \(n_{x}\) and \(n_{w}\), assuming independence between \(x\) and \(w\), the average quantization noise power is \(\sigma_{x}^{2}\sigma_{nw}^{2}+\sigma_{w}^{2}\sigma_{nx}^{2}+\sigma_{nw}^{2} \sigma_{nw}^{2}\). The signal-to-quantization-noise ration (SQNR) is therefore
+
+\[\frac{1}{\text{SQNR}} = \frac{\sigma_{x}^{2}\sigma_{nw}^{2}+\sigma_{w}^{2}\sigma_{nx}^{ 2}+\sigma_{nw}^{2}\sigma_{nw}^{2}}{\sigma_{x}^{2}\sigma_{w}^{2}} \tag{65}\] \[= \frac{\sigma_{nw}^{2}}{\sigma_{x}^{2}}+\frac{\sigma_{nx}^{2}}{ \sigma_{w}^{2}}+\frac{\sigma_{nw}^{2}\sigma_{nx}^{2}}{\sigma_{w}^{2}\sigma_{ x}^{2}} \tag{66}\]
+
+Now, if the dynamic range of \(x\) (\(w\)) is \(R_{x}\) (\(R_{w}\)), and one were using \(b_{x}\) (\(b_{z}\)) bits to discretize the real and imaginary parts \(x\) (\(w\)), the real and imaginary parts of the quantization error \(n_{x}\) is
+
+Figure 9: Residual error in the LMS and RLS techniques

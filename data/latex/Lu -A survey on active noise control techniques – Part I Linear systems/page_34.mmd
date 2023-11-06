@@ -1,0 +1,15 @@
+the vehicle noise and vibration control [324]. It demonstrated that such method has the ability to tolerate the uncertainties of the input vibration signals and to handle the nonlinear phenomena.
+
+It should be noted that some of the above mentioned methods are applied to NLANC systems. Although classical FIR filters achieve stable performance in these systems, the fuzzy modeling methods can perform identification more accurately. In addition, fuzzy-logic systems can also be combined with artificial neural networks (ANNs), generating fuzzy ANNs. We review the fuzzy ANNs methods in Part II.
+
+## 4 Novel linear ANC methods emerging in the past decade
+
+### Psychoacoustic ANC systems
+
+The human hearing sensation has selective sensitivity to different frequencies. Hence, it is reasonable to take the characteristics of human hearing into account. In other words, more considerations should be given to the frequency response of the controller. Moreover, minimizing the perceived annoyance of human hearing with residual noise, which needs to be resolved.
+
+To tackle this problem, the psychoacoustic ANC (PANC) systems were established by weighting of the reference and the error signal [337; 26; 338]. These PANC systems have similar structure to the FxFeLMS algorithm in Fig. 10 but with different design of the error filter \(H(z)\). Besides, instead of sound pressure level (SPL) and averaged noise reduction (ANR), PANC is inclined to utilize loudness as the measurement of the performance. In [26], a hybrid PANC system was proposed, which can simultaneously control either uncorrelated disturbance or correlated primary noise. In [339], a novel approach integrating subband PANC and psychoacoustic masking was proposed, resulting in reduced computational cost and improved perceptual sound quality and high-frequency noise reduction level.
+
+### Sparse ANC algorithms
+
+Taking advantage of the sparsity that may exist in ANC systems to improve performance is a method worthy of attention. A filtered-x improved proportionate NLMS (FxFPNLMS) algorithm was devised by extending the proportionate algorithm to feedforward ANC system [340]. Moreover, the FxFPNLMS algorithm has been shown to be compatible with convex combination schemes for Gaussian noise source, yielding enhanced performance under different degrees of sparsity [340]. By using the framework of the FxAP algorithm, some algorithms were proposed which incorporates

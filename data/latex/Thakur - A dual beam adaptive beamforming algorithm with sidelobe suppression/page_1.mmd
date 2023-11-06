@@ -1,0 +1,35 @@
+# A dual beam adaptive beamforming algorithm with sidelobe suppression
+
+Diksha Thakur
+
+Corresponding author.
+
+Miksha.thakur18@gmail.com
+
+Vikas Baghel
+
+Salman Raju Talluri
+
+Department of Electronics and Communication Engineering, Joyce University of Information and Technology, Wahonghut, 173234, India
+
+###### Abstract
+
+A new adaptive beamforming algorithm is developed not only to provide distortionless responses towards the two desired signals in the presence of interferences and noise but also to control the sidelobe level (SLL). The conventional standard Capon beamformer (SCB) deals with only one desired signal at a time and also offers much high SLL which can enhance unanticipated interferences. So, the conventional SCB is modified for incorporating two signals of interest (SOI) and a limited number of constraints are introduced for suppressing the SLL Unity gain is maintained towards the second desired signal by employing an additional constraint in the conventional SCB. To control the SLL, a limited number of angles are sampled in the sidelobe region and the powers that correspond to these sampled angles are constrained to a specified level. The sampled angles are chosen from the particular sidelobe regions around the main beams and an empirical formula is given for determining the number of constraints. The resulting optimization problem is convex and solved by the CVX solver of Matlab to obtain the optimum weight vector. Finally, simulations are performed for various scenarios to evaluate the performance of the proposed algorithm. Simulation results illustrate that the proposed algorithm can receive two desired signals simultaneously and also becomes less vulnerable to unpredicted interferences in the vicinity of main beams as the SLL is minimized. The proposed algorithm achieves the maximum improvements of 20 dB and 16 dB in the SLL for two different scenarios as compared to the conventional algorithm. Moreover, the proposed algorithm preserves the SINR as that of SCB dual beam algorithm. In addition, the proposed algorithm can be used in medical imaging to resolve dual targets using two beams.
+
++
+Footnote †: journal: homepage: www.sciencedirect.com/journal/measurement-sensors
+
++
+Footnote †: journal: homepage: www.sciencedirect.com/journal/measurement-sensors
+
+## 1 Introduction
+
+Array signal processing is a significant area of signal processing due to its numerous applications in various fields such as radar, sonar, acoustics, communications, medical imaging etc. [1, 2, 3, 4] Adaptive beamforming is a key technology of array signal processing that is mainly used to enhance the signal of interest (SOI) and suppress the interfering signals as well as noise by dynamically changing the weights of the array elements [5].
+
+The minimum variance distortionless response (MVDR) [6] beamformer developed by Capon also known as SCB is one of the most popular beamformers. The adaptive weight vector of SCB is determined by minimizing the array output power while maintaining a distortionless response toward the SOI [7]. But the optimization problem of SCB is designed to enhance the single SOI.
+
+In various practical applications which utilize adaptive arrays, such as satellite communications, mobile communications, etc., there is a requirement to deal with multiple desired signals simultaneously along with interfering signals [8, 9, 10]. Hence, the antenna array must be capable of forming multiple beams to receive multiple signals from distinct desired directions with the suppression of interfering signals.
+
+SCB achieves the distortionless response but unfortunately does not consider the sidelobe level (SLL) which is an essential parameter of the radiation pattern. In an adaptive array system, there may be scenarios in which sudden or unanticipated interferences may imagine the array which leads to performance degradation as the beamformer is not able to suppress these unanticipated interferences. An effective way to address this problem is by controlling the SLL. A radiation pattern with controlled SLL is desirable as it improves the performance during unintentional interferences and also prevents unnecessarily distribution of radiated power in the form of sidelobes. From the literature, it is evident that the sidelobes are more dominant around the main beam. These dominant sidelobes should be minimized because if unintentional interfering signals impinge the array in the direction of these dominant sidelobes, then instead of suppression, they could get enhanced.
+
+In the literature, several approaches have been reported to control

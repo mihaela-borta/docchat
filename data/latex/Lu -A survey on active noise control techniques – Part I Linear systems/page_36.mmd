@@ -1,0 +1,17 @@
+convex combination to the modified FxLMP algorithm. The step size of this algorithm is based on a convex combination adaptation, which can avert the conflicted requirement between small noise residue and convergence rate.
+
+### Fractional-order ANC algorithms
+
+It is worth noting that some properties of fractional-order facilitate an effective combination of the existing ANC algorithms. Some typical definitions of fractional calculus are listed in the following: Grunwald-Letnikov (GL), Riemann-Liouville (RL), Erdelyi-Kober, Hadamard, Caputo, and Riesz. However, initial studies have shown that the use of GL and RL is helpful in improving noise reduction performance, particularly in the Gaussian noise source:
+
+_1) GL-based algorithms:_ In [246], a novel algorithm was proposed for the ANC system, which online estimates the secondary path according to adaptation of GL. To improve the robustness, the algorithm in [347] exploited the output of FxLMS as the input of the fractional GL-algorithm.
+
+_2) RL-based algorithms:_ The RL differintegral operator was used in [348] to correct the updating of the parameters in the FeLMS algorithm. As shown in simulations, the new algorithm converges fast and reaches a small error.
+
+The fractional Fourier transform (FrFT) is a unified time-frequency transform, which reflects the information in the time and frequency domains of the signal. Such transform has been applied to solve the ANC problem in [349], which can obtain less error and faster convergence for various linear frequency modulated (LFM) signals.
+
+### ANC algorithms for 3-D space
+
+The 3-D ANC algorithm has always been a difficult point of the technology. A novel ANC algorithm was proposed to control sound in 3-D space [31]. The diagram of the 3-D ANC system
+
+Figure 15: Diagram of the 3-D ANC system.

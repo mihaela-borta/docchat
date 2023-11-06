@@ -1,0 +1,18 @@
+with the discrete wavelet transform (DWT)-FxLMS algorithm was proposed to suppress noise inside vehicles [156]. According to the structural vibration and acoustic characteristics of a simplified vehicle cavity model, it can be seen that such method has high application potential for active noise and vibration control (ANVC) systems.
+
+_2) FxLMS-based algorithms for narrowband noise_
+
+The FxLMS-based algorithm can effectively tackle the noise from NANC systems. So far, a large number of FxLMS improvements have been proposed and analyzed for NANC, see [157; 158; 25; 159; 160; 161; 162; 163; 164; 165]. In Table 3, we summarize the development of FxLMS analysis in the context of NANC systems before the past decade. By supposing that the reference is synchronously-sampled, the state-space representation was suggested for analyzing a general FxLMS algorithm [166]. Moreover, the multi-channel version and its common narrowband modification were also covered by this form. The performance analysis of the FxLMS algorithm in feedback ANC systems with internal model control (IMC) was also performed in [167] for band-limited white noise and it was subsequently improved by adaptive notch filtering (ANF) [168]. Moreover, it overcame a difficulty that the feedback ANC system has a degraded performance for controlling broadband noise. The convergence properties of the FxLMS algorithm for traditional and new NANC systems have also been studied [169; 164].
+
+In [172; 173], the FxLMS algorithm was employed by a parallel or direct NANC system. Moreover, the corresponding convergence analyses for parallel NANC and direct/parallel NANC systems were conducted. All the results demonstrated that the parallel or direct/parallel NANC can converge faster than the conventional NANC.
+
+It is well known that the fixed step size can lead to a trade-off between convergence rate and noise residue. Therefore, it is natural to utilize variable step size (VSS) schemes in the conventional
+
+\begin{table}
+\begin{tabular}{c|l|l|l|l} \hline \hline
+**Years** & **Authors** & **Conditions** & **Contributions** & **References** \\ \hline
+1999 & Bermudez and & The secondary path is linear time-invariant & Non-Wiener behavior of the & [170] \\  & Bershad & filters and the input signal is a deterministic & filtered LMS algorithm & \\ \hline
+2006 & Vicente and & The secondary path is a delay system and the & FxLMS convergence condition & [134] \\  & Masgrau & input signal is a narrowband signal & with deterministic reference & \\ \hline
+2008 & Xiao & The secondary path is modeled by MA process & Stochastic analysis of the & [171] \\  & & and the input signal is a narrowband signal & FxLMS for NANC & \\ \hline \hline \end{tabular}
+\end{table}
+Table 3: Development of FxLMS analysis for NANC systems before the past decade.

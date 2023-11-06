@@ -1,0 +1,21 @@
+to the blind MOE algorithm after the training sequence is extinguished. Such a scheme, however, requires a training sequence as well as the channel vector (possibly estimated using the training data).
+
+In addition, note that the LMS algorithm does not require the channel vector. The MOE algorithm, on the other hand, "trains" on the steering vector.
+
+## 8 Constant Modulus Algorithm
+
+The final iterative algorithm we will consider is a constant modulus algorithm which requires neither the steering vector nor training data. This algorithm looks for a signal with a constant magnitude (modulus) within the received data vector (which comprises signal, interference and noise). This algorithm is only applicable within the class of modulation schemes that use symbols of equal power, e.g., BPSK, QPSK).
+
+We are essentially looking for a signal of a particular magnitude (say \(\alpha\)) within the received data vector \(\mathbf{x}\). The functional we are trying to minimize is therefore
+
+\[f(\mathbf{w})=\mathrm{E}\left\{\left|\left|\mathbf{w}^{H}\mathbf{x}\right|^{p} -\left|\alpha\right|^{p}\right|^{q}\right\} \tag{58}\]
+
+One can choose the parameters \(p\) and \(q\) arbitrarily, though usually they are chosen to be small integers. To illustrate the development of the CMA algorithm, consider the case of \(p=1\) and \(q=2\), and setting \(\alpha=1\), the functional we are minimizing is
+
+\[f(\mathbf{w}) = \mathrm{E}\left\{\left|\left|\mathbf{w}^{H}\mathbf{x}\right|-1 \right|^{2}\right\}\] \[= \mathrm{E}\left\{\left|\left|y\right|-1\right|^{2}\right\}\] \[\Rightarrow\nabla f = 2\frac{\partial f}{\partial\mathbf{w}^{*}}=2\left(\left|y \right|-1\right)\mathbf{x}\frac{y}{\left|y\right|} \tag{59}\] \[\Rightarrow\mathbf{w}_{n+1} = \mathbf{w}_{n}-2\mu\left(y-\frac{y}{\left|y\right|}\right)\mathbf{ x}_{n} \tag{60}\]
+
+A significant problem with the CMA algorithm is that without any external information, it can identify only one signal. Usually, this is the signal with the greatest power. There are variants of the CMA algorithm that alleviate this problem somewhat.
+
+## 9 Impact of Digitization
+
+Finally, as a practical matter, the adaptive algorithms presented here would be implemented after digitizing the received signals with an A/D. However, by digitizing the signals, we introduce

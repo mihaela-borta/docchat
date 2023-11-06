@@ -1,0 +1,17 @@
+is shown in Fig. 15, where \(\mathcal{H}(\omega)\) stands for a filter with the transfer function
+
+\[\mathcal{H}(\omega)=\frac{3ci}{2r_{fg}\omega}j_{0}(\psi a\omega)+\frac{3(2r_{fg} \omega-3ci)}{2a\psi r_{fg}\omega^{2}}j_{1}(\psi a\omega) \tag{16}\]
+
+where \(\omega\) is the angular frequency, \(r_{fg}\) is a parameter related to the locations \(r_{f}\) and \(r_{g}\), \(a\) is the radius of the sphere, \(i\) represents the imaginary unit, \(c\) is the sound velocity, \(\psi\) is a parameter related to the location \(\phi_{f}\), \(\phi_{g}\) and \(c\), and \(j_{m}\) denotes the spherical Bessel function of order \(m\). On this basis, the error signal \(e(n)\) can be defined in the z-domain as
+
+\[e(z)\triangleq d(z)+w(z)\left(\mathcal{H}(z)\left(S(z)-\hat{S}(z)\right)+\hat {S}(z)\right)X(z). \tag{17}\]
+
+The above algorithm has demonstrated to be effectiveness in both simulations and experiments for ZoQ with arbitrary shapes (not only for spherical quiet zones). However, the 3D-ANC algorithm for multiple noise sources (such as chaotic noise and impulsive noise) is still in urgent need of research.
+
+### Selective ANC systems
+
+Instead of employing the conventional real-time computation of control filter coefficients, the selective ANC (SANC) systems select the control filters from a set of pre-tuned filters based on the temporal or spectral audio features of incoming sounds. As such, the SANC systems have the improved robustness of control filters and reduced computational complexity. In [350], the SANC systems were originally proposed for open window systems and then extended to other methods. In [351], the SANC systems was integrated into the virtual microphone technique, leading to better noise reduction performance than the conventional virtual microphone technique. More extensions of the SANC systems can be referred to [352; 353; 354; 355]
+
+### Distributed ANC algorithms
+
+Figure 16: Diagram of the distributed ANC system with an incremental collaborative strategy.

@@ -1,0 +1,13 @@
+the IIR filter, whereas the above mentioned FxLMS and FeLMS algorithms are commonly adopted to adapt the coefficients of the FIR filter. Fig. 11 depicts the diagram of an ANC system using FuLMS algorithm. The iterative process of the pole and zero-coefficients for the basic FuLMS algorithm can be summarized as follows [232]:
+
+\[\mathbf{a}(n+1)=\mathbf{a}(n)+\mu_{1}e(n)\mathbf{y}(n-1) \tag{11a}\] \[\mathbf{b}(n+1)=\mathbf{b}(n)+\mu_{2}e(n)\mathbf{X}(n) \tag{11b}\]
+
+where \(\mathbf{a}(n)\) and \(\mathbf{b}(n)\) are the weight vectors of poles and zeroes in the IIR filter at time \(n\), respectively, \(\mu_{1}\) and \(\mu_{2}\) are the step sizes, and \(\mathbf{y}(n-1)\) is the previous output vector. The FuLMS algorithm consumes fewer coefficients than the FIR filter and is particularly well-suited for ANC systems with short acoustic ducts [232; 233]. For example, in an automotive engine, the intake system owns a short duct and as such, the FuLMS-based algorithms are usually preferred. Unfortunately, the FuLMS algorithm cannot ensure global convergence because of the multimodal error surface and inherent limitation of the IIR filter. To solve the stability problem, new FuLMS algorithms were developed in [232; 234]. In [232], a modified FuLMS algorithm was developed by combining a simple hyper-stable adaptive recursive filter (SHARF) and a VSS scheme. By using the equation-error (EE), the FuLMS algorithm was derived according to the output-error (OE) model and its step size bound and global minimum were also analyzed [234].
+
+#### 2.3.2 Filtered-u RLS-based algorithms
+
+_1) FuRLS-based algorithms for broadband noise_
+
+To improve the convergence rate of the FuLMS algorithm, it is reasonable to consider RLS-based IIR filters. The algorithms in [235; 236] were considered using the filtered-u RLS (FuRLS)-type
+
+Figure 11: Diagram of the FuLMS algorithm, where the zero and pole coefficients are updated by using one adaptive algorithm. The coefficients can be also independently updated by using two adaptive algorithms.

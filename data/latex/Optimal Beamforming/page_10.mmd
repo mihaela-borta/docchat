@@ -1,0 +1,15 @@
+## 4 Beamforming in Practice
+
+In practice it is impossible to implement the optimal beamformer, because the correlation matrix \(\mathbf{R}\) is unknown. In this section, we will investigate five techniques to implement beamforming in practice. Four of these are iterative, though we start with the only non-iterative technique: direct matrix inversion.
+
+### Direct Matrix Inversion
+
+In direct matrix inversion (DMI), the correlation matrix \(\mathbf{R}\) is estimated by averaging over multiple snapshots (time samples of the received data). If the interference does not change significantly over the time length used in the averaging process, one can show that (in Gaussian interference), the following average is a maximum likelihood estimate of the correlation matrix.
+
+\[\tilde{\mathbf{R}}=\frac{1}{K}\sum_{k=1}^{K}\mathbf{x}_{k}\mathbf{x}_{k}^{H} \tag{28}\]
+
+where \(\mathbf{x}_{k}\) is the data received at the \(N\) elements at time index \(k\). In [2], the authors prove that we need \(K>2N\) so that the output SINR is within 3dB of the optimum.
+
+DMI can be applied using either the MMSE or Max SNR formulations. In using the MMSE
+
+Figure 4: Adapted pattern with and without noise.

@@ -1,0 +1,37 @@
+where \(n\) is the discrete time index, \(x_{\mathcal{I}}\) denotes the output of microphone \(\mathcal{I}\), \(\tau_{\mathcal{I}}\) is the propagation delay from the source to microphone \(\mathcal{I}\), \(\alpha_{\mathcal{I}}\) is an attenuation factor due to propagation effects, and \(v_{\mathcal{I}}\) is the additive noise at microphone \(\mathcal{I}\) and includes any background or sensor noise as well as reverberation. Transposing to the frequency domain and using vector notation, the signal model is compactly written as
+
+\[\mathbf{X}(e^{\beta\Omega})=S(e^{\beta\Omega})\mathbf{d}+\mathbf{V}(e^{\beta \Omega}) \tag{2}\]
+
+where
+
+\[\mathbf{X}(e^{\beta\Omega}) = \big{[}X_{0}(e^{\beta\Omega})\ X_{1}(e^{\beta\Omega})\ \cdots\ X_{M \rightarrow 1}(e^{\beta\Omega})\big{]}^{T} \tag{3}\] \[\mathbf{V}(e^{\beta\Omega}) = \big{[}V_{0}(e^{\beta\Omega})\ V_{1}(e^{\beta\Omega})\ \cdots\ V_{M \rightarrow 1}(e^{\beta\Omega})\big{]}^{T}\] (4) \[\mathbf{d} = \big{[}\alpha e^{-\beta\Omega_{\Omega}}\ \alpha_{1}e^{-\beta\Omega}\ \cdots\ \alpha_{M \rightarrow 1}e^{-\beta\Omega\tau_{M\rightarrow 1}}\big{]}^{T} \tag{5}\]
+
+is the propagation vector, \(S(e^{\beta\Omega})\), \(X_{\mathcal{I}}(e^{\beta\Omega})\), and \(V_{\mathcal{I}}(e^{\beta\Omega})\) denote the discrete-time Fourier transform of \(s(n)\), \(x_{\mathcal{I}}(n)\), and \(v_{\mathcal{I}}(n)\), respectively, \({}^{T}\) denotes the transpose of a vector or matrix, and \(\Omega\) denotes discrete frequency.
+
+The microphones are filtered and then summed across the array to form the beamformer output
+
+\[Z(e^{\beta\Omega})=\mathbf{W}^{H}(e^{\beta\Omega})\mathbf{X}(e^{\beta\Omega}) \tag{6}\]
+
+where
+
+\[\mathbf{W}^{H}(e^{\beta\Omega})=\big{[}W_{0}^{*}(e^{\beta\Omega})\ W_{1}^{*}(e ^{\beta\Omega})\ \cdots\ W_{M\rightarrow 1}^{*}(e^{\beta\Omega})\big{]} \tag{7}\]
+
+represents the traditional beamformer, \({}^{H}\) denotes the conjugate transpose and * the complex conjugate.
+
+## III Decoupled Beamformer-Noise Canceller Model
+
+Fig. 1 exhibits the decoupled BF-NC model. The front-end is composed of a bank of beamformers (denoted in the figure by BF) which may belong to any class of spatial filters: delay-and-sum, filter-and sum, constant-directive [13], etc.
+
+The design of these beamformers is performed _a priori_ for a specific environment and the beamformers come equipped with steerable beams. The steering of these beamformers is performed by an intelligent beam-steering module, which operates as a "look-up" table. The control unit scans the environment, determines the locations of the signal and interference sources, and then feeds these locations to the beam-steering module. The beam-steering module then translates these locations to appropriate beamformer coefficients which are then sent to the beamformers.
+
+The beamformers provide signal references that are fed to the switching module, which then appropriately directs these references to the noise canceller unit. The control unit informs the switching module of which beamformer reference is that of the desired signal, and which beamformers are steered to the interference sources. The desired signal reference is fed to the primary (upper) noise canceller input. Interfering signal references are connected to the reference noise canceller inputs. The noise cancellers provide added interference attenuation at the directions of arrival (DOA) that correspond to significant interference power. Notice that the noise cancellers are quite separate from the front-end beamformers.
+
+It is important to note that in addition to the decoupled aspect, there is a fundamental difference between this design and that of the GSC. The blocking matrix of the GSC is replaced with fixed beamformers which are steered to the interference sources: instead of steering nulls to the desired signal source, we are steering beams to the interferers. Moreover, in a reverberant environment, these beamformers may also be steered to the significant interfering reflections. The implications of this fundamental change are very important and are discussed thoroughly in future sections.
+
+The decoupled BF-NC scheme is a collection of modules. The emphasis is no longer on optimizing one central beamforming structure, as in the MVDR beamformer. Rather, existing steerable beamformers are loosely connected to a back-end multiple-reference adaptive noise canceller. Beamformers with more "robust" but less directive beams are implemented at the front-end, while significant attenuation of interfering sources is provided by the back-end noise cancellers.
+
+### _Particular Case: Single Interference Source_
+
+Assuming a single source of interference, a multiple-reference noise canceller is not needed in the decoupled case, and thus the model of Fig. 1 may be simplified to include only two beamformers and one noise canceller, as shown in Fig. 2. The auxiliary modules have been omitted from the figure. Furthermore, the adaptive filter has been labeled \(W_{\text{NC}}^{*}\) which denotes
+
+Fig. 1: Structure of a decoupled BF-NC.

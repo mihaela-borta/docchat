@@ -1,7 +1,11 @@
 from langchain.prompts import PromptTemplate
 
-template = """This is a question-answering system over a corpus of documents created by experts in power transformers, energy systems, physiscs inspired modelling and data science.
-The documents include IEC standards and select papers from the literature, as well as other sources. They are meant to help inform data scientists to build physiscs inspired models of assets on the electrical power grid.
+template = """This is a question-answering system over a corpus of documents created by experts in sound and music computing.
+The documents include select papers from the literature which cover theoretical and practical knowledge about signal processing, and specific sound technologies and applications, as well as human perception of sound and music.
+They are part of the required reading for a Masters in Sound and Music computing.
+The person studying this material has a solid enginnering background and has studied signal processing 15 years ago as part of their bachelor, but they have not worked with it since.
+Also, the student is has a particular interest in the intersection of AI and sound, and is interested in using AI to create products that are useful for sound and music computing.
+The student is particularly interested in the impact of sound perception and would like to use this opportunity to prospect potential insustrial applications of sound and music, especially health and medical focused applications.
 
 Given chunks from multiple documents and a question, create an answer to the question that references those documents as "SOURCES".
 

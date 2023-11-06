@@ -1,0 +1,27 @@
+algorithm for active noise and vibration control systems. Moreover, two novel fast implementation schemes were proposed for the FuRLS algorithm, generating the fast FuRLS algorithm. Simulation results demonstrated that two fast FuRLS algorithms outperform the FuLMS algorithm and SHARF algorithm.
+
+The contributions of the existing works for broadband noise are summarized in Table 8.
+
+### Computational complexity
+
+In this subsection, the computational complexity of the classical algorithms is analyzed. The number of multiplications for each algorithm per iteration is utilized to estimate the computational complexity. The computational complexity of some classical algorithms is summarized in Table 9, where \(L_{s}\) denotes the length of the secondary path model, \(L_{p}\) denotes the length of the (pseudo-)inverse of secondary path model, \(L_{a}\) denotes the length of analysis and synthesis filters, and \(L_{f}\) and \(L_{b}\) are the length of the forward and feedback sections of the IIR filter 3
+
+Footnote 3: For computational complexity of the multi-channel ANC algorithms, the reader can refer to [221, 114].
+
+\begin{table}
+\begin{tabular}{l|l|l|l} \hline \hline
+**FxLMS-based** & \begin{tabular}{l} **FxAP-based** \\ **algorithms** \\ \end{tabular} & 
+\begin{tabular}{l} **FxRLS-b** \\ **algorithm** \\ \end{tabular} \\ \hline
+[133, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155] & [194, 195, 196, 197, 198] & [200] \\ \hline
+**Lattice ANC** & \begin{tabular}{l} **FeLMS-based** \\ **algorithms** \\ \end{tabular} & 
+\begin{tabular}{l} **FuLMS-b** \\ **algorithm** \\ \end{tabular} \\ \hline
+[213, 214, 215, 216] & [222] & [231, 232, 21] \\ \hline \hline \end{tabular}
+\end{table}
+Table 8: Contributions of the algorithm for broadband noises in the past decade.
+
+\begin{table}
+\begin{tabular}{l|l|l} \hline \hline
+**Types** & **Algorithms** & **Number of multiplications** \\ \hline \multirow{4}{*}{\begin{tabular}{l} Filtered-x \\ ANC family \\ \end{tabular} } & 
+\begin{tabular}{l} FxLMS \\ \end{tabular} & \(2M+L_{s}+1\) \\ \cline{2-3}  & FxAP & \(2P^{2}M+2PM+M+L_{s}\) \\ \cline{2-3}  & FxRLS & \(3M^{2}+5M+L_{s}+2\) \\ \cline{2-3}  & Subband ANC & \(3M+NL_{a}+2(L_{a}+1)+L_{s}\) \\ \cline{2-3}  & FxGAL & \(21M+2L_{s}\) \\ \hline Filtered-e & FeLMS (ALMS) & \(2M+L_{s}+1\) \\ \cline{2-3} ANC family & FeLMS (SPE) & \(2M+L_{p}+1\) \\ \hline Filtered-u & & \\ ANC & FuLMS & \(2(L_{f}+L_{b})+L_{s}+1\) \\ family & & \\ \hline \hline \end{tabular}
+\end{table}
+Table 9: Computational complexity of the algorithms.

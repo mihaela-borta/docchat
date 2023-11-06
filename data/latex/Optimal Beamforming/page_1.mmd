@@ -1,0 +1,15 @@
+**Optimal Beamforming**
+
+## 1 Introduction
+
+In the previous section we looked at how _fixed_ beamforming yields significant gains in communication system performance. In that case the beamforming was fixed in the sense that the weights that multiplied the signals at each element were fixed (they did not depend on the received data). We now allow these weights to change or _adapt, depending on the received data_ to achieve a certain goal. In particular, we will try to adapt these weights to _suppress interference_. The interference arises due to the fact that the antenna might be serving _multiple_ users.
+
+## 2 Array Weights and the Weighted Response
+
+Figure 1 illustrates the receive beamforming concept. The signal from each element (\(x_{n}\)) is multiplied with a _weight_\(w_{n}^{*}\), where the superscript \({}^{*}\) represents the complex conjugate. Note that the conjugate of the weight multiplies the signal, not the weight itself. The weighted signals are added together to form the output signal. The output signal \(r\) is therefore given by
+
+\[r = \sum_{n=0}^{N-1}w_{n}^{*}x_{n}, \tag{1}\] \[= {\bf w}^{H}{\bf x},\]
+
+where \({\bf w}\) represents the length \(N\) vector of weights, \({\bf x}\) represents the length \(N\) vector of received signals and the superscript \({}^{H}\) represents the Hermitian of a vector (the conjugate transpose), i.e., \({\bf w}^{H}=\left[w_{0}^{*},\ \ w_{1}^{*},\ \ \ldots\ \ w_{N-2}^{*},\ \ w_{N-1}^{*}\right]=\left[{\bf w}^{T} \right]^{*}\).
+
+Figure 1: A general beamforming system.

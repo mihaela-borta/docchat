@@ -1,0 +1,17 @@
+FxLMS algorithm. As for the NANC system, a VSS-FxLMS algorithm that has fast convergence, improved tracking capability, and small noise residue, was proposed [159]. Simulations demonstrated that the VSS-FxLMS algorithm even achieved ameliorated performance than the FxRLS algorithm in non-stationary noise environments [159]. Some similar alternating VSS approaches have been proposed for secondary path identification [174] and for NANC systems [175, 176].
+
+_3) FxLMS-based algorithms for impulsive noise_
+
+The impulsive noise is often due to the occurrence of noise disturbance with low probability but large amplitude, which has become a great challenge for ANC systems [177]. The \(\alpha\)-stable noise can effectively model the impulsive noise encountered in ANC systems, which explains why such noise is widely used for active impulsive noise control (AINC) [177, 178, 179].
+
+To combat \(\alpha\)-stable noise, a clipped FxLMS algorithm was proposed by Sun et al., which puts limitations on the input signal [119]. In 2009, the improved version of Sun's algorithm was proposed and termed as Akhtar's algorithm [177]. The Akhtar's algorithm has a restriction in both input signal and error signal, which can be expressed as:
+
+\[\mathbf{w}(n+1)=\mathbf{w}(n)+\mu e^{\prime}(n)(s(n)*\mathbf{x}^{\prime}(n))\] (4a) where \[e^{\prime}(n)=\left\{\begin{array}{ll}c_{1},&\quad\text{if }e(n)\leq c_{1}\\ c_{2},&\quad\text{if }e(n)\geq c_{2}\\ e(n),&\text{otherwise}\end{array}\right.\] (4b) and \[x^{\prime}(n)=\left\{\begin{array}{ll}c_{1},&\quad\text{if }x(n)\leq c_{1}\\ c_{2},&\quad\text{if }x(n)\geq c_{2}\\ x(n),&\text{otherwise}\end{array}\right. \tag{4c}\]
+
+where \(c_{1}>0\) and \(c_{2}>0\) are two threshold parameters.
+
+To further enhance the performance, an FxlogLMS algorithm, which minimizes the squared logarithmic transformation of the error signal, was proposed in [180]. The update equation of the FxlogLMS algorithm is described by
+
+\[\mathbf{w}(n+1)=\mathbf{w}(n)+\mu\text{sgn}\{e(n)\}\frac{\log|e(n)|}{|e(n)|}\mathbf{X}(n) \tag{5}\]
+
+and for \(|e(n)|<1\), setting \(|e(n)|=1\). In this expression, \(\text{sgn}\{\cdot\}\) denotes the sign function.

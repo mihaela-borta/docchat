@@ -1,0 +1,33 @@
+FeLMS-based algorithms for NANC. In [223], the FeLMS algorithm was intentionally introduced to deal with the noise in NANC systems. Moreover, the convergence behavior of the algorithm was analyzed. This work has proven that FeLMS-type algorithms are feasible in dealing with narrowband noise. The existing works of NANC are outlined in Table 6.
+
+### Filtered-\(u\) ANC family
+
+Several fundamental filtered-u ANC algorithms have been proposed before the past decade. We summarize these efforts in Table 7. In the following, the development of filtered-u ANC algorithms in the past decade is reviewed in detail.
+
+#### 2.3.1 Filtered-\(u\) LMS-based algorithms
+
+_1) FuLMS-based algorithms for broadband noise_
+
+It is well known that the ANC algorithms can be extended to active vibration control (AVC) problem [231]. Among the ANC algorithms, the FuLMS algorithm can be effectively applicable to both AVC and ANC systems. The FuLMS algorithm is often used to update the weight vector of
+
+\begin{table}
+\begin{tabular}{l|l|l|l|l} \hline
+**FxLMS-based** & \multicolumn{1}{c|}{**Subband ANC**} & \multicolumn{1}{c|}{**FxLMS-based algorithms**} & \multicolumn{1}{c}{**FeLMS-based algorithms**} \\ \hline
+[19, 25, 159, 160, 161, 162, 163, 164, 165, 169, 174, 175, 176, 172, 173, 166, 157, 158] & \multicolumn{1}{c|}{} & \\ \hline
+**For uncorrelated narrowband disturbances** & [211](Also for & [22, 23, 224] & band-limited & multi-tonal & [223] \\ \hline
+**For band-limited white noises and tonal signals** & white noise) & \multicolumn{1}{c|}{} & \\ \hline
+[21, 167, 168] & & & \\ \hline \end{tabular}
+\end{table}
+Table 6: Contributions of NANC in the past decade.
+
+\begin{table}
+\begin{tabular}{l|l|l|l} \hline
+**Years** & **Authors** & **Contributions** & **References** \\ \hline
+1987 & Eriksson, Allie, & IIR adaptive algorithm (recursive least mean square) & [225] \\  & and Greiner & for ANC & \\ \hline
+1991 & Eriksson & FuLMS algorithm & [226] \\ \hline
+1994 & Snyder & FuLMS algorithm with simple hyper-stable adaptive & [227] \\  & recursive filter & & \\ \hline
+2003 & Fraanje, Verhaegen, & Analysis of the FuLMS algorithm and develop a & [228] \\  & and Doelman & preconditioned FuLMS algorithm & \\ \hline
+2003 & Lu et al. & IIR filter with lattice form for ANC & [229] \\ \hline
+2004 & Sun and Meng & Steiglitz-Mcbride type adaptive IIR algorithm for ANC & [230] \\ \hline \end{tabular}
+\end{table}
+Table 7: Time line of filtered-u ANC algorithms.

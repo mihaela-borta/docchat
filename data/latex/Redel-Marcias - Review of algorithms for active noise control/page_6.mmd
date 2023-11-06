@@ -1,0 +1,15 @@
+## 3 Control Algorithms
+
+The controller have to be able to follow the variations that can be generated in the acoustic field as change of the phase, amplitude or transfer functions. An adaptive digital filter consists of two parts: one is a digital filter which processes the expected output signal, the other one is an algorithm to adjust weighting coefficients of the digital filter.
+
+The analog signals of the sensors, error and reference microphones are sample to 500 Hz and the sample frequency have to be 10 times this value, that it, fs=5000 Hz (Allie, Bremigan and Ericksson, 1988). The "anti-aliasing" filter has a cut frequency lesser than the sampling frequency.
+
+Two digital filters are usually applied to ANC, i.e. IIR or FIR. Any transfer function can be modeled by a FIR filter. Moreover, there are the more coefficients mean the better approximation is reached (Oppenheim and Shafer, 1971). The number of coefficients, establishes the maximum delay that can be imposed by the filter to the input data. If the number of coefficients is large because of the delay, a IIR filter can be used.
+
+The only difference is the store of output data in other table. In addition, they are multiplied by other coefficients in the case of the IIR filter. The transfer function should follow the acoustic changes of the environment, thus the coefficients c(k) of the filter have to be update.
+
+The selection of the filter in the controller, FIR or IIR, depend on the application of the ANC system and on the characteristics of the filter.
+
+The main objective of adaptive algorithms is the calculation of the coefficients to minimize the error signal. Many adaptive algorithms are based on steepest descent algorithm that employ instantaneous estimate of gradient of the mean squared error.When this area correspond to the quadratic instant error and a FIR filter is used to minimize errors between output of the filters and the desired response, the adaptive algorithm is called Least Mean Squares (LMS) (Widrow et al, 1975). This algorithm is the commonest due to its simplicity. The adaptive controllers can be configured either in feedback or in feedforward fashion. When IIR filter based on LMS algorithm is employed in ANC, the resulting structure/algorithm is referred to as U-Filtered LMS (Bambang, 2000). To account the secondary path effect, a filtered version of LMS, called filtered-XLMS, is commonly used in ANC systems (Burgess, 1981). The applications of filtered-X LMS require modeling the secondary path in term of FIR filters, and utilizes this model to adapt the control FIR filter coefficients. Filtered-X LMS has been widely used because of its simplicity and its relatively lower computational load. However, this algorithm presents a well-known drawback since it is limited to linear
+
+Figure 3: Multi-channel ANC system.

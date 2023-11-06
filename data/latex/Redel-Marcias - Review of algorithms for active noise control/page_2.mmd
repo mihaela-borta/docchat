@@ -1,0 +1,21 @@
+# Review of Algorithms for Active Noise Control
+
+###### Abstract
+
+The previous regulations about acoustics in buildings ruled only isolation, forgetting other important subjects. The new code in Spain, specifically the DB-HR document, also include the regulations of excessive noise reverberating that produces and causes discomfort in many cases non-speech intelligibility, this circumstance is crucial in certain areas. The passive control restrictions in these limits of frequencies are well known. The insulating materials, soundwalls, acoustic filters, Helmholtz resonator, expansion chamber, the encapsulation of the noise source, mean large dimensions and/or weight to 500 Hz or less. The active noise control (ANC Active Noise Control) can be used to cancel the noise to high-frequency and the passive techniques can be used to low-frequency. This paper presents algorithms for active noise control and the typical industrial applications.
+
+A New Journal of Solids and Structures, 1998
+
+1
+
+Redel-Macias MD, Cubero-Atienza AJ, Salas-Morera L, Arauzo-Azofra A, Garcia-Hemandez L Universidad de Cordoba-Area de Proyectos de ingenieria
+
+ANC, noise, acoustical, FIR, IIR, X-LMS, U-LMS, genetic algorithms.
+
+## 1 Introduction
+
+There are two basic classifications of methods used to sound control: active and passive. Some example of passive control include placing a barrier to block sound transmission or resurfacing a room to alter its response. Active noise control (ANC) is based on the principle of superposition, i.e., an unwanted primary noise is attenuated by a secondary noise of equal amplitude and opposite phase (Nelson and Elliot, 1992; Kuo and Morgan, 1996). The design of an active noise control system pursues maximum attenuation of the primary noise (Nelson, Curtis and Elliot, 1987).
+
+The German physicist Lueg, was the first to provide a description of active noise control in a 1936 patent (Lueg, 1936), which gives an example of a one-dimensional duct problem with a wave propagating only in one direction. In 1953 Olson and May (Olson and May, 1953) developed a different system, in which the disturbance noise is detected by a microphone and fed back through a controller to a loudspeaker located close to the microphone. But the real interest for the ANC emerges from the work of Widrow (Widrow et al, 1975) about adaptive filtering and its implementation by DSP's. The power of the adaptive filters lies in its ability to adapt the control system to the variations of the noise. In the 80's practical applications about ANC in ducts (Burgess, 1981) and hearing projector were filed.
+
+Today outstanding results have been achieved for a wide variety of applications which include aircraft engines, automobile interiors, heating, ventilation and air conditioning (HVAC) systems as well as household applications (Emborg, 1994; Hirsch, 1999; Sas, 1998). In

@@ -1,0 +1,21 @@
+by suppressing interference. Mathematically, this can be written as
+
+\[{\bf w}_{\rm MOE} = \arg\min_{\bf w}{\rm E}\left\{|y|^{2}\right\},\qquad{\bf w}^{H}{\bf h }_{0}=c, \tag{10}\] \[\equiv \arg\min_{\bf w}{\rm E}\left\{\left|{\bf w}^{H}{\bf x}\right|^{2} \right\},\qquad{\bf w}^{H}{\bf h}_{0}=c.\]
+
+This final minimization can be solved using the method of Lagrange multipliers, finding \(\min_{\bf w}\left[{\cal L}({\bf w};\lambda)\right]\), where
+
+\[{\cal L}({\bf w};\lambda) = {\rm E}\left\{\left|{\bf w}^{H}{\bf x}\right|^{2}\right\}+\lambda \left[{\bf w}^{H}{\bf h}_{0}-c\right],\] \[= {\rm E}\left\{{\bf w}^{H}{\bf x}{\bf x}^{H}{\bf w}\right\}+\lambda \left[{\bf w}^{H}{\bf h}_{0}-c\right],\] \[= {\bf w}^{H}{\bf R}{\bf w}+\lambda\left({\bf w}^{H}{\bf h}_{0}-c \right),\] \[\Rightarrow\frac{\partial{\cal L}}{\partial{\bf w}^{H}} = {\bf R}{\bf w}+\lambda{\bf h}_{0}\] \[\Rightarrow{\bf w}_{\rm MOE} = -\lambda{\bf R}^{-1}{\bf h}_{0} \tag{12}\]
+
+Using the constraint on the weight vector, the Lagrange parameter \(\lambda\) can be easily obtained by solving the gain constraint, setting the final weights to be
+
+\[{\bf w}_{\rm MOE}=c\frac{{\bf R}^{-1}{\bf h}_{0}}{{\bf h}_{0}^{H}{\bf R}^{-1}{ \bf h}_{0}}. \tag{13}\]
+
+Setting the arbitrary constant \(c=1\) gives us the minimum variance distortionless response (MVDR), so called because the output signal \(y\) has minimum variance (energy) and the desired signal is not distorted (the gain on the signal direction is unity).
+
+Note the MOE technique does not require a reference signal. This is an example of a _blind_ scheme. The scheme, on the other hand, does require knowledge of the spatial signature \({\bf h}_{0}\). The technique "trains" on this knowledge.
+
+### Maximum Output Signal to Interference Plus Noise Ratio - Max SINR
+
+Given a weight vector \({\bf w}\), the output signal \(y={\bf w}^{H}{\bf x}=\alpha{\bf w}^{H}{\bf h}_{0}+{\bf w}^{H}{\bf n}\), where \({\bf n}\) contains both interference and noise terms. Therefore, the output signal to interference plus noise ratio (SINR) is given by
+
+\[{\rm SINR} = {\rm E}\left\{|\alpha|^{2}\right\}\frac{\left|{\bf w}^{H}{\bf h} _{0}\right|^{2}}{{\rm E}\left\{\left|{\bf w}^{H}{\bf n}\right|^{2}\right\}}=A ^{2}\frac{\left|{\bf w}^{H}{\bf h}_{0}\right|^{2}}{{\rm E}\left\{\left|{\bf w} ^{H}{\bf n}\right|^{2}\right\}}, \tag{14}\]

@@ -1,0 +1,45 @@
+be rendered [17, 71]. HOA considers all the spherical domains above the truncation of N = 1. This representation requires \((N+1)^{2}\) spherical harmonics - HOA signals - and \((2N+1)\) channels for each Ambisions order.
+
+#### 3.2.3 Binaural decoding
+
+In the field of virtual, augmented, and mixed reality (VR/AR/MR), the binaural rendering of the sound field is in fact the most practical choice of reproduction with headphones. Two different approaches can be used for the binaural decoding [71] over headphones. The first method considers an array of virtual loudspeakers that would form the spherical reproduction as if it was an array of real loudspeakers, and assign two HRTTs to each loudspeaker, for each ear. The output signal for each ear will then be the sum of \(L\) loudspeaker signals \(\sum_{n=0}^{N}\sum_{m=-n}^{m}B_{m}^{m}(\mathbf{\omega})D_{n,l}^{m}\) convolved with the corresponding HRTTs, \(H_{l,left}(\mathbf{\omega})\;H_{l,right}(\mathbf{\omega})\):
+
+\[S_{ear}(\mathbf{\omega})=\sum_{l=1}^{L}H_{l}(\mathbf{\omega})\left(\sum_{n=0}^{N}\sum _{m=-n}^{n}B_{m}^{m}(\mathbf{\omega})D_{n,l}^{m}\right) \tag{6}\]
+
+The second approach to binaural HOA reproduction consists of the pre-computation of the spherical harmonics-based HRTTs \(H_{m}^{m}(\mathbf{\omega})\) by solving the equation:
+
+\[H(\mathbf{\theta},\mathbf{\varphi},\mathbf{\omega})=\sum_{n=-n}^{\infty}H_{m}^{m}(\mathbf{ \omega})Y_{n}^{m}(\mathbf{\theta},\mathbf{\varphi}), \tag{7}\]
+
+where the spherical harmonics coefficients can be determined by direct integration or using the least square solution. The decoding process is defined by the channel arrangement only [52].
+
+#### 3.2.4 Resonance Audio implementation
+
+In our implementation, Ambisonics was used for the rending of complete virtual sound sources with specific spatial information. Resonance Audio performed the encoding of the virtual audio sources, tracking their spatial position in terms of direction and distance and encoding it directly with \(3^{rd}\) order HOA. ACN channel ordering in combination with SN3D normalization were employed. The encoding in the spherical domain is built using pre-computation of HRTTs in the spherical domain, allowing to project multiple sound objects in the Ambisonics sound field. In the case of the \(3^{rd}\) order Ambisonics, a Lebedev grid was used to distribute the matrix of virtual loudspeakers in the most uniform way. From this grid, a matrix of seventeen angles was used in Matlab to pre-compute the spherical harmonics [37, 44] from the HRTF set (1550 measurements) of the Neumann KU 100 dummy head provide by the SADIE database [37].
+
+### _Interaction metaphors_
+
+This case study considered the simulation of a virtual microphone array equipped with an ideal and versatile virtual beamformer at the user's ears. The system was capable of storing the a priori knowledge for each virtual source, independently. The directivity model of the virtual beamformer took the form of polar pattern coefficients in Ambisonics domain resulted from the following equation:
+
+\[P(\mathbf{\theta})=g|(1-\alpha+\alpha cos(\mathbf{\theta}))|^{\gamma} \tag{8}\]
+
+where the users can dynamically manipulate the following three parameters, reinforcing the natural/intuitive use of beamforming control for enhancing directional hearing:
+
+* _gain level_, \(g\); gain factor applied to the source signal at the specific \(\theta\), in a continuous scale from -20 dB FS and 20 dB FS;
+* _directivity alpha_, \(\alpha\): from a full omnidirectional pattern (\(\alpha=0\)) to a maximum of a bipolar pattern (\(\alpha=1\)); being \(\alpha=0.5\) equivalent to a perfect cardioid sensibility pattern;
+* _sharpness_, \(\gamma\): from a value of \(\gamma=1\) equivalent to the natural sensibility and \(\gamma=10\) the maximum-allowed value for narrowing the beam width.
+
+During a calibration period these values could be changed by using the hand controller and a specific mapping (see Fig. 4 for a graphical representation). The user was able to adjust the directivity parameters and the gain parameters, independently. The grip and up or down in the trackpad would change the directivity pattern, and left and right would affect the width of the pattern. On the other hand, trigger and up or down on the trackpad would increase or decrease the gain value of the associated source. According to Hamacher et al. [26], a linear smooth function was introduced by changing the focus source, enabling a progressive transition between the new selected source and the previous one within approximately half a second.
+
+We developed the beamforming interactions starting from the standard control by head orientation. We extended it with a recently implemented [7, 23] and more natural/embodied control by eye-gaze. Finally, we defined an artificial interaction considering two simultaneous beamformers controlled by head and hand, respectively. Since this choice aimed at exploring superhuman hearing abilities for the specific pairing task, the introduction of a second beamformer is a straightforward path towards an effective extension of available hearing-aid tools.
+
+**Head-guided control (II):** When using the head interaction, the user was able to choose/focus on a specific target by rotating and positioning the head directly in front of the area of interest. The listener's area is divided into as many areas of interest as the number of stimuli that should be known and tracked by the virtual system. To avoid a sort of selection interference when the participant moves the head, the algorithm waited one second before changing the source in focus. The listener was also able to freely move the head without worrying about constantly selecting random focus sources.
+
+**Eye-guided control (HE):** The eye control considered eye positions in the two-dimensional projected planes resulting from the intersection of the eye gaze with position of the sources in the space. A collision vector between the eye gazing point and virtual objects in the VE allows the listener to select an audio source by looking directly at it. This interaction enabled the participant to choose between one out of two sources in the same field of view. It is worthwhile to notice that the eye movement is still dependent on the head rotation to be able to select sources from behind. This is the reason why this beamformer interaction was labelled head plus eye (i.e., HE).
+
+**Head-plus-controller for a dual beamformer (HC):** The HTC Vive controller was used for pointer interaction and the participant could select one source of interest. The controller was tracked in space and its relative position to the focus sources around the listener was computed according to the occupied area by the controller, always connected to a certain source as in the H interaction. The controller had an instantaneous selection timing, so the user could very fast change between focus sources. Since the controller might be considered an extension of the body, it might not be directly affected by the dominance of the head. Accordingly, the participant could be facing one source of interest while pointing the controller at another source. The virtual system managed the information from both the artificially selected source and the head-centric selection, combining parameters from the two beamformers.
+
+## 4 The user study
+
+The main aim of the user study was to investigate if the three virtual beamformers could support auditory attention and have an impact on performances in highly challenging listening situations with different levels of visual information.
+
+Fig. 4: Parameters control with HTC VIVE hand controller.

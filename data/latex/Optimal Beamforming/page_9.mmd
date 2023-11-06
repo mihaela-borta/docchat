@@ -1,0 +1,19 @@
+signal does not arrive from a single direction. We assume that the noise at each element is white, independent, zero mean and Gaussian, with noise power \(\sigma^{2}\), i.e., \(\mathrm{E}\left[\mathbf{n}\mathbf{n}^{H}\right]=\sigma^{2}\mathbf{I}\). Here, in an abuse of notation we use \(\mathbf{n}\) to represent noise (which was noise and interference in the earlier sections).
+
+The noise component in the output signal is \(\mathbf{w}^{H}\mathbf{n}\), i.e. the noise power in the output (\(\sigma_{o}^{2}\)) is given by
+
+\[\sigma_{o}^{2} = \mathrm{E}\left[\left|\mathbf{w}^{H}\mathbf{n}\right|^{2}\right] =\mathrm{E}\left[\left|\sum_{i=0}^{N-1}w_{i}^{*}n_{i}\right|^{2}\right], \tag{24}\] \[= \sigma^{2}\sum_{i=0}^{N-1}\left|w_{i}\right|^{2}. \tag{25}\]
+
+The noise is, therefore, enhanced by the "total energy" in the weights. Now, consider the adapted beam pattern. In direction \(\phi\) the gain of the array due to the weights is given by \(\mathbf{w}^{H}\mathbf{s}(\phi)\),where \(\mathbf{s}(\phi)\) is the steering vector associated with direction \(\phi\). In fact, due to the structure of the steering vector, setting \(\psi=kd\cos\phi\),
+
+\[G(\psi)=\sum_{n=0}^{N-1}w_{n}\epsilon^{jn\psi}, \tag{26}\]
+
+i.e., in \(\psi\) space, the beam pattern is the DFT of the weights. Therefore, due to Parseval's theorem,
+
+\[\sum_{i=0}^{N-1}\left|w_{i}\right|^{2}=\int_{0}^{2\pi}\left|G(\psi)\right|^{2}d\psi, \tag{27}\]
+
+i.e., the enhancement of the noise power is the same as total area under the beampattern. Clearly, if the adapted pattern had high sidelobes, the noise would be enhanced. Therefore, in trying to suppress interference, the beamforming algorithm (MOE/MMSE/Max SINR) also attempts to keep sidelobes low, thereby maximizing the overall SINR.
+
+Figure 4 plots the adapted beampattern in the case of signals with noise and signals without noise. Clearly, is noise were absent the minimum interference power is achieved by a set of weights that result in high sidelobes. If these weights were used in a real system, they would minimize interference power, but enhance the noise power. The solid line plots the adapted beam pattern with exactly the same signal and interference data, but now noise is also added in. Note both plots pass through 0dB at the direction of the desired signal (\(0^{o}\)). Clearly to minimize _SINR_ (not SIR), the sidelobes must come down.
+
+This issue is of relevance when trying to use algorithms such as _zero-forcing_ in the spatial case. Zero-forcing is a technique that focuses on the interference only and is best known when implementing _transmit_ beamforming (as opposed to the receive beamforming we have been doing) [1]. It is well known that zero-forcing enhances noise. This is because in attempting to cancel interference only, it lets the sidelobes rise, resulting in higher noise power.

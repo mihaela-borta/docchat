@@ -1,0 +1,19 @@
+Using these weights, we can define a _weighted response_. If the received data is from a single signal arriving from angle \(\phi\), the received signal is \(\mathbf{x}=\mathbf{s}(\phi)\). The output signal, therefore is,
+
+\[r(\phi)=\mathbf{w}^{H}\mathbf{s}(\phi). \tag{2}\]
+
+Plotting this function \(r(\phi)\) versus \(\phi\) results in the weighted response or the _weighted beampattern_.
+
+The array, of \(N\) elements, receives message signals from \(M+1\) users. In addition, the signal at each element is corrupted by thermal noise, modelled as additive white Gaussian noise (AWGN). The received signals are multiplied by the _conjugates_ of the weights and then summed. The system set up is illustrated in Fig. 1. The weights are allowed to change, depending on the received data, to achieve a purpose. If the signals at the \(N\) elements are written as a length-\(N\) vector \(\mathbf{x}\) and the weights as a length-\(N\) vector \(\mathbf{w}\), the output signal \(y\) is given by
+
+\[y=\sum_{n=0}^{N-1}w_{n}^{*}x_{n}=\mathbf{w}^{H}\mathbf{x}. \tag{3}\]
+
+The signal received is a sum over the signals from multiple users, _one of which we will designate the "desired" signal_. The received data is a sum of signal, interference and AWGN.
+
+\[\mathbf{x} = \alpha\mathbf{h}_{0}+\mathbf{n}, \tag{4}\] \[\mathbf{n} = \sum_{m=1}^{M}\alpha_{m}\mathbf{h}_{m}+\text{noise}. \tag{5}\]
+
+The goal of beamforming or interference cancellation is to isolate the signal of the desired user, contained in the term \(\alpha\), from the interference and noise. The vectors \(\mathbf{h}_{m}\) are the _spatial signatures_ of the \(m^{\text{th}}\) user. Note that, unlike in direction of arrival estimation, we are **not** making any assumptions as to the structure of this spatial signature. In perfect line-of-sight conditions, this vector is the steering vector defined earlier. However, in more realistic setting, this vector is a single realization of a random fading process. The model above is valid because are assuming the fading is slow (fading is constant over the symbol period or several symbol periods) and flat (the channel impulse response is a \(\delta\)-function).
+
+## 3 Optimal Beamforming
+
+We begin by developing the theory for optimal beamforming. We will investigate three techniques, each for a different definition of optimality. Define the interference and data covariance matrices as \(\mathbf{R}_{n}=\mathrm{E}\left[\mathbf{n}\mathbf{n}^{H}\right]\) and \(\mathrm{R}=\mathrm{E}\left[\mathbf{x}\mathbf{x}^{H}\right]\), respectively.

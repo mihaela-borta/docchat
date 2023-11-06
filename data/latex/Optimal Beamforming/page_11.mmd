@@ -1,0 +1,13 @@
+criterion, the cross correlation vector \({\bf r}_{xd}\) is estimated by
+
+\[\tilde{\bf r}_{xd} = \frac{1}{K}\sum_{k=1}^{K}d_{k}^{*}{\bf x}_{k}, \tag{29}\] \[\tilde{\bf w}_{\rm MMSE} = \tilde{\bf R}^{-1}\tilde{\bf r}_{xd} \tag{30}\]
+
+i.e., using DMI in this fashion requires a sequence of \(K\)_known_ transmitted symbols, also known as _a training sequence_. This is our first example of a training based beamforming procedure. On the other hand, a _blind_ procedure does not require a training sequence. DMI may also be applied in this fashion using the MOE criterion.
+
+\[\tilde{\bf w}_{\rm MOE}=\tilde{\bf R}^{-1}{\bf h}_{0}. \tag{31}\]
+
+The problem with this procedure is that, as shown in [3], the data used to estimate the correlation matrix \({\bf x}_{k}\) must be _signal-free_, i.e., it is only possible to use the Max SINR criterion. Figure 5 plots the output pdf normalized output SINR (normalized with respect to the theoretical optimal). The two plots are for \(K=200\). Clearly, in both cases, when the signal is present in the training data, the pdf of the output SINR is significantly to the left (the mean is much lower) than when the signal is absent. The physical interpretation appears to be that the MOE process assumes all the signals in the training data is interference. So, the MOE approach tries to place _a null and a maximum_ simultaneously in the direction of the desired signal.
+
+This problem is well established in radar systems, where a guard range is placed to eliminate any of the desired signal. In a communication system, on the other hand, this would imply that the desired user must stay silent in the training phase. Of course, if the desired signal is silent, this is equivalent to the Max SINR criterion. This is in direct contrast to the MMSE criterion where the user must transmit a known signal. It must be emphasized that this problem only occurs when the correlation matrix is _estimated_. We have already shown that when the true matrix is known, the MMSE and Max SNR t
+
+Figure 5: PDF of the output SINR when the signal is and is not present in the training data when using the blind MOE technique

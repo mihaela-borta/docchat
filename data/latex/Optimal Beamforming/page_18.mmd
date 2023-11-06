@@ -1,0 +1,11 @@
+that is orthogonal to the channel vector \(\mathbf{h}_{0}\). Using Eqn. (55),
+
+\[\nabla f_{\perp} = 2\left[\mathbf{x}^{H}\left(\mathbf{h}_{0}+\mathbf{w}\right) \right]\left[\mathbf{x}-\left(\mathbf{h}_{0}^{H}\mathbf{x}\right)\mathbf{h}_{0} \right], \tag{56}\] \[= 2y^{*}\left[\mathbf{x}-y_{MF}\mathbf{h}_{0}\right],\] \[\Rightarrow\mathbf{w}_{n+1} = \mathbf{w}_{n}-\mu y_{n}^{*}\left[\mathbf{x}_{n}-y_{MF_{n}} \mathbf{h}_{0}\right], \tag{57}\]
+
+where \(y_{MF_{n}}\) is the output from the top branch only, the matched filter at the \(n\)-th time instant and \(y_{n}\) is the output of the overall filter at the \(n\)-th time instant. Note that the term in the brackets is the _non-adaptive estimate_ of the interference vector at the \(n^{\text{th}}\) symbol.
+
+This algorithm does not require any training information. At no point is the symbol value required to arrive at the set of adaptive weights. Also, even if the interference were cancelled exactly, the output signal \(y\) would not be the transmitted symbols because the MOE method cannot account for the unknown complex signal amplitude (\(\alpha\)).
+
+As mentioned earlier, the drawback of this algorithm is slow convergence. Figure 8 compares the convergence of the LMS and MOE algorithm for a sample interference scenario, in terms of the output signal to interference plus noise ratio2. As can be seen the SINR converges to nearly the same value, however the MOE requires significantly more training. A rule of thumb is that LMS requires about 10 times the number of weights to converge while MOE at least twice that. For this reason, in practice, if only a limited number of training symbols were available, one could use the LMS or RLS algorithms in this training phase for relatively fast convergence and then switch
+
+Figure 8: Comparison of the convergence of the LMS and MOE algorithms

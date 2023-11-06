@@ -1,0 +1,18 @@
+of interest by a fixed controller. Unfortunately, the non-stationary reference signals bring great challenges to the stability of such systems. In contrast, the feedback ANC systems with adaptive controller can deal with non-stationary reference signals and the stability problems are no longer a great challenge for adaptive systems. In [21], a generalized form of the LFxLMS algorithm was proposed for feedback ANC systems, which replaces \(\gamma\) with a designed symmetric Toeplitz matrix \(\mathbf{Q}\). In [19], a simplified feedback ANC system was proposed which employs the residual noise directly as the reference signal. Compared to the IMC algorithm [167], it shows a lower computational burden since it does not compute the convolution.
+
+### Analog control in ANC
+
+In the feedback ANC systems, analog control (analog circuitry) based on a negative feedback loop is broadly used for headphones, due to the cost and battery-life issues [287]. It is known that utilizing both digital and analog control has the ability to cancel broadband and narrowband noises. In particular, the analog control is fairly inexpensive and it has good broadband noise reduction owing to the short time delay of analog components employed in the controller [296]. However, the performance of the analog controller for NANC is limited because it is unable to track the environmental changes, which may hinder the application of analog control in some cases [296]. To address this limitation, a hybrid system was proposed in [296], which adds an analog feedback
+
+\begin{table}
+\begin{tabular}{p{56.9pt}|p{113.8pt}|p{113.8pt}|p{113.8pt}} \hline
+**Years** & **Authors** & **Contributions** & **References** \\ \hline
+1991 & Eriksson & Feedback ANC system & [285] \\ \hline
+1992 & Popovich, Melton, and Allie & Multi-channel feedback ANC system & [286] \\ \hline
+1997 & Bai and Lee & Using \(H_{\infty}\) optimization technique to design the feedback ANC system & [287] \\ \hline
+1999 & Rafaely and Elliott & Using \(H_{2}/H_{\infty}\) method to design the feedback ANC system and apply to headrest systems & [288] \\ \hline
+1999 & Chen, Chiueh, and Chen & Feedback ANC for magnetic resonance noise control & [289] \\ \hline
+2003 & Kuo, Kong, and Gan & Feedback ANC algorithm with three distributed error sensors for industrial machine noise control & [290] \\ \hline
+2008 & Zhou et al. & Feedback ANC system using a model-free controller with simultaneous perturbation stochastic approximation & [291] \\ \hline \end{tabular}
+\end{table}
+Table 13: Contributions of feedback ANC systems before the past decade.

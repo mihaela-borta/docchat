@@ -1,10 +1,8 @@
 import os
-import json
 import asyncio
 import discord
 from concurrent.futures import ThreadPoolExecutor
 
-import aiohttp
 
 from modal import Image, Mount, Secret, Stub, asgi_app
 from utils import pretty_log
@@ -35,7 +33,7 @@ image = Image.debian_slim(python_version="3.10").pip_install(  # and we install 
 
 
 secrets = [Secret.from_name("docchat-frontend-secret")]
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.members = True
 
 client = discord.Client(intents=intents)
@@ -55,7 +53,7 @@ stub = Stub(
 
 def start_client():
     key = os.environ.get("DISCORD_AUTH")
-    pretty_log('Starting Discord client')   
+    pretty_log('Starting Discord client')
 
     client.run(key)
 
@@ -63,7 +61,7 @@ def start_client():
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
-    asyncio.get_running_loop().create_task(background_task.remote())    # This makes issues.
+    asyncio.get_running_loop().create_task(background_task())    # This makes issues.
 
 @client.event
 async def on_message(message):
@@ -73,9 +71,9 @@ async def on_message(message):
         pretty_log(f'RECEIVED MESSAGE: {message.content} from {message.author.name}')
         await queue.put(message)
 
-@stub.function()
+#@stub.function()
 async def background_task():
-    executor = ThreadPoolExecutor(max_workers=1)
+    executor = ThreadPoolExecutor(max_workers=1)    
     loop = asyncio.get_running_loop()
     print("Task Started. Waiting for inputs.")
     while True:
@@ -84,6 +82,8 @@ async def background_task():
         user_id = client.user.id
         message_content = msg.content.replace(f"@{username} ", "").replace(f"<@{user_id}> ", "")
         query = generate_prompt(message_content)
+        pretty_log(f'!!!!!!!!!Message: {message_content}\n query: {query}')
+
         response = await send_request_to_backend(query)
         
         await msg.reply(response, mention_author=False)
@@ -106,7 +106,7 @@ def generate_backend_url():
     return url
 
 
-@stub.function()
+#@stub.function()
 async def send_request_to_backend(query: str):
     import requests
     import json
@@ -133,7 +133,18 @@ async def send_request_to_backend(query: str):
     return answer
 
 
+
 def generate_prompt(query):
+    return f"""### Instruction:
+You are an expert in sound and music computing and you use your enjoy sharing your knowledge with students currently following a masters in this topic to help them in their learning journey.
+### Query:
+{query}
+
+### Response:
+"""
+
+
+def generate_prompt_okto(query):
     return f"""### Instruction:
 You are an expert in electrical power transformers and using physiscs-inspired modelling to describe their operation.
 ### Query:

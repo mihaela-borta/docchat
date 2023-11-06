@@ -1,0 +1,13 @@
+### Solutions of acoustic feedback
+
+In practical situations, the antisound output \(y(n)\) to the loudspeaker also propagates upstream to the reference microphone, leading to a corrupted reference signal. The coupling of the acoustic wave from the active loudspeaker (cancelling loudspeaker) to the reference microphone is called _acoustic feedback_. The development of the acoustic feedback before the past decade is outlined in Table 11.
+
+The _feedback neutralization_ is the simplest acoustic feedback solution, which uses a separate feedback path neutralization (FBPN) filter with the controller. The principle of feedback neutralization is exactly the same as that of acoustic echo cancellation [265]. A block diagram of the ANC system using the FxLMS algorithm with feedback neutralization is shown in Fig. 12, where \(F(z)\) is the feedback path from cancelling loudspeaker to the reference microphone, \(\hat{F}(z)\) denotes the estimate of \(F(z)\) (FBPN filter), and \(y_{a}(n)\) denotes the acoustic feedback component. As can be seen, this electrical model of the feedback path is driven by the antinoise signal \(y(n)\), and its
+
+\begin{table}
+\begin{tabular}{l|l|l|l} \hline \hline
+**Years** & **Authors** & **Contributions** & **References** \\ \hline \multirow{2}{*}{1994} & Kuo and & Online feedback compensation & [261] \\  & Luan & for multi-channel ANC & \\ \hline \multirow{2}{*}{2002} & \multirow{2}{*}{Kuo} & Online feedback path & \multirow{2}{*}{[262]} \\  & & neutralization filter for ANC & \\ \hline \multirow{2}{*}{2002} & Sun and, & Online feedback path & \multirow{2}{*}{[263]} \\  & Chen & neutralization filter using new & \\ \cline{1-1}  & & FuLMS algorithm & \\ \hline \multirow{2}{*}{2007} & Akhtar, Abe, & Online acoustic feedback path & \multirow{2}{*}{[264]} \\  & and Kawamata & modeling for both narrowband & \\ \cline{1-1}  & & and broadband ANC & \\ \hline \hline \end{tabular}
+\end{table}
+Table 11: Development of the acoustic feedback before the past decade.
+
+Figure 12: Diagram of the FxLMS algorithm with feedback neutralization.

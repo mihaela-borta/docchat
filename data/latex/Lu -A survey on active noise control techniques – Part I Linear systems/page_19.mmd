@@ -1,0 +1,21 @@
+frequency bands with small loop gain. As a result, the convergence rate for any signal appearing in this frequency range is slow.
+
+To overcome these drawbacks, the FeLMS algorithm employs the error signal filtered by the error filter \(H(z)\), instead of filtering the reference signals by \(S(z)\). Two types of methods can be used to design \(H(z)\). The first type of the FeLMS algorithm, termed as the adjoint LMS (ALMS) algorithm, has similar properties to the FxLMS algorithm. For the ALMS algorithm, \(H(z)\) is designed as
+
+\[H(z)=z^{-\beta}\hat{S}^{*}(z) \tag{8}\]
+
+where \(\hat{S}^{*}(z)\) represents the adjoint transfer function of the secondary path and \(\beta\) represents the number of delays.
+
+The second type of the FeLMS algorithm, called the secondary path equalization (SPE) algorithm, has the same block diagram as the ALMS algorithm shown in Fig. 9, where \(e_{f}(n)\) is the residual noise \(e(n)\) that has been filtered by the error filter \(H(z)\). In this algorithm, \(H(z)\) is designed as the (pseudo-)inverse of the secondary path filter
+
+\[H(z)=\left[z^{-\beta}\hat{S}^{-1}(z)\right]_{+} \tag{9}\]
+
+where \(\hat{S}^{-1}(z)\) is the inverse transfer function of \(\hat{S}(z)\), and \(\left[V(z)\right]_{+}\) stands for the casual part of \(V(z)\). The weight update equation of the FeLMS algorithm is given by
+
+\[\mathbf{w}(n+1)=\mathbf{w}(n)+\mu e_{f}(n)\mathbf{X}(n-\beta) \tag{10}\]
+
+To further accelerate the convergence rate of the FeLMS algorithm, the FxFeLMS algorithm was proposed, which can overcome the slow convergence of the FxLMS algorithm when the reference input is the sinusoidal signal [219]. The structure of the FxFeLMS algorithm is plotted in Fig. 10, where \(H(z)\) is required in both input and error signal path. If \(H(z)=1\), the FxFeLMS algorithm degenerates into the basic FxLMS algorithm. Under ideal situations, i.e., \(S(z)=\hat{S}(z)\), \(|H(z)|^{2}=1/|S(z)|^{2}\). In [222], a modified FxFeLMS algorithm was proposed, which is derived based on the stochastic model for the first and second moments of the FxFeLMS algorithm without the independent assumption.
+
+_2) FeLMS-based algorithms for narrowband noise_
+
+The performance of the FxLMS-based algorithms for NANC systems is subjected to the number of targeted frequencies and the estimated secondary path. Therefore, it is natural to consider using

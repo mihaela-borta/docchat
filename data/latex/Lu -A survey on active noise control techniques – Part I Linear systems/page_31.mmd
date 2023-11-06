@@ -1,0 +1,30 @@
+loop into a digital ANC system to reduce disturbances. We summarize the development of analog control for ANC in Table 14.
+
+Note that some important analog control methods have been proposed before the past decade, and relatively few studies have been conducted in these years. In [297], a short review was presented for hybrid analog-digital systems, including six possible combinations of the classical control structures for ANC systems. The development of the analog control in recent years can also be found in [298, 299]. In [299], a continuous FxLMS algorithm was proposed for hybrid analog-to-digital systems. Moreover, an approximation of the algorithm was developed, which can be easily implemented in digital signal processor (DSP).
+
+### Methods of reducing computational complexity
+
+As an important structure of ANC systems, the subband ANC algorithm is well-suited for
+
+\begin{table}
+\begin{tabular}{c|l|l|l} \hline
+**Years** & **Authors** & **Contributions** & **References** \\ \hline
+1995 & Dawley & ANC headset with an analog controller & [292] \\ \hline
+1987 & Leitch and & A review for ANC systems, including analog control & \\  & Tokhi & methods & [293] \\ \hline
+2001 & Yu and Hu & An active analog filter is used to realize the fourth-order & \\  & & controller & [294] \\ \hline
+2002 & Pawelczyk & A detailed procedure for designing and practically & \\  & & realizing an analogue ANC system & [295] \\ \hline
+2005 & Song, Gong, & Adding an analog feedback loop to a digital ANC system, & \\  & and Kuo & generating a hybrid feedback ANC headset & [296] \\ \hline \end{tabular}
+\end{table}
+Table 14: Development of the analog control before the past decade.
+
+\begin{table}
+\begin{tabular}{c|l|l|l} \hline
+**Years** & **Authors** & **Contributions** & **References** \\ \hline
+1995 & Douglas & Fast FxAP algorithm & [300] \\ \hline
+1999 & Douglas & Fast multi-channel FxLMS algorithm & [301] \\ \hline
+2003 & Bouchard & Fast multi-channel FxAP algorithm for ANC & \\  & & and acoustic equalization systems & [302] \\ \hline
+2006 & Carini and & Multi-channel FxAP algorithm & \\  & Sicuranza & with set-membership filtering & [303] \\ \hline
+2007 & Albu, Bouchard, & Filtered-x pseudo AP algorithm & \\  & and Zakharov & based on Gauss-Seidel method & [304] \\  & & or dichotomous coordinate descent (DCD) & \\ \hline
+2008 & Wesselink and & Filtered-e fast algorithms for multi-channel ANC & [305] \\  & Berkhoff & & \\ \hline \end{tabular}
+\end{table}
+Table 15: Fundamental of the reduced computational complexity for ANC before the past decade.

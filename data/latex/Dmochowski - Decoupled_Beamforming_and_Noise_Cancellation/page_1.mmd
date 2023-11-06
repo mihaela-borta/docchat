@@ -1,0 +1,31 @@
+# Decoupled Beamforming and Noise Cancellation
+
+Jacek P. Dmochowski and Rafik A. Goubran,
+
+Manuscript received June 15, 2005; revised October 18, 2006. This paper is based on the Master's thesis work of J. Dmochowski, carried out at the Department of Systems and Computer Engineering, Carloton University, Ottawa, Canada. This work was supported in part by the Ontario Centre of Excellence--Communications and Information Technology Ontario (OCE-CTIO), Mitel, Ontario Graduate Scholarships (OGS), and by the National Science and Engineering Research Council of Canada (NSERC).J. P. Dmochowski is with the INRS-EMT, Universite du Quebec, Montreal, PQ HSA 1K6, Canada (e-mail: mochow@ent.inrs.ca).R. A. Goubran is with the Department of Systems and Computer Engineering, Carleton University, Ottawa, ON K1S 5B6, Canada (e-mail: Rafik.Goubran@sc.carleton.ca).Digital Object Identifier 10.1109/TIM.2006.887196
+
+###### Abstract
+
+The enhancement of noise-corrupted speech acquired by microphones is indispensable to the functioning of a wide variety of digital signal processing algorithms. Many existing products are equipped with steerable, stand-alone fixed beamformers which provide moderate levels of directivity. Moreover, many applications have long employed the classical adaptive noise canceller configuration with a reference sensor near the noise source to cancel unwanted noise. In this paper, the cascading of stand-alone beamformers with back-end adaptive noise cancellers is studied. A decoupled model for signal enhancement using front-end beamformers and cascaded noise cancellers is presented. The inter-operation of the beamforming and noise cancelling units is studied by defining the signal-to-interference ratio (SIR) gain, directivity index, and white noise gain offered by the beamforming and noise cancelling components. The performance of decoupled beamformer-noise canceller structures is evaluated using experimental measurements. An experimental procedure for evaluating output SIR is presented. Results reveal SIR improvements of up to 27 dB, and are compared to those stemming from conventional adaptive beamformers.
+
+ Adaptive beamforming, adaptive noise cancellation, delay-and-sum beamformer, generalized sidelobe canceller, microphone arrays.
+
+## I Introduction
+
+Applications requiring the acquisition of far-end speech include stereophonic teleconferencing [1], hands-free communication [2], and human-machine interaction [3]. In these applications, the speech signal is generally contaminated with noise that hinders the proper operation of the involved algorithms. Therefore, there exists a need to remove the presence of the corruptive noise from the received microphone signals.
+
+Arrays of microphones serve as the aperture for digital signal processing algorithms aimed at speech enhancement. A comprehensive review of the state-of-the-art in speech enhancement is given in [4]. It is noted therein that there exists a tradeoff between noise reduction and speech degradation. In other words, in general, the more that one reduces the noise, the more that the speech is distorted. It is important to control this tradeoff to yield the maximal signal-to-noise ratio (SNR).
+
+Classical methods for ridding microphone signals of the effects of noise include adaptive beamforming techniques which minimize total output power subject to a set of linear constraints [5, 6]. Most notably, the minimum variance, distortionless response (MVDR) approach of Capon [7] and its alternative formulation, the Generalized Sidelobe Canceller (GSC) [8], operate with a single constraint and adapt to minimize the power of a given noise field. Sidelobe cancellers exhibit problems when operating in a reverberant environment due to the desired signal cancellation phenomenon. Many solutions to the signal cancellation problem have been proposed; see [9] for a thorough review of these methods.
+
+Several existing products are equipped with steerable, stand-alone fixed beamformers which provide moderate levels of directivity (see [10], for example). Microphone arrays are also sometimes embedded into devices such as micro-electrical-mechanical-systems (MEMS) (see [11]). These are beamformers designed for a specific environment and embedded into a certain shape. Moreover, noise cancelling applications have long employed the classical adaptive noise canceller configuration of [12] with a reference microphone near the noise source to cancel unwanted noise. This paper examines the cascading of stand-alone fixed beamformers with back-end adaptive noise cancellers. The interaction between the front-end beamformers and back-end noise cancellers is examined. An experimental evaluation that measures the signal-to-interference ratio (SIR) gain offered by the respective units is carried out.
+
+It is imperative to understand that the cascading of the beamforming and noise cancelling units is performed without combining the front-end beamforming and subsequent noise cancelling units into a tightly coupled structure. As an example of the latter, the adaptive version of the GSC actually contains front-end beamformers and cascaded adaptive noise cancellers. However, this combination in hardware of beamformers and noise cancellers is _not_ the subject of this paper. This paper moves toward a different paradigm for adaptive beamforming in which each component is a stand-alone unit, but may be loosely interconnected with the other to form a "decoupled" structure. The resulting structure is termed the decoupled beamformer-noise canceller (BF-NC).
+
+Section II outlines the signal propagation model used throughout the paper. The decoupled BF-NC model is presented in detail in Section III. The performances of the beamforming and noise cancelling units in a decoupled BF-NC are examined in Section IV. The experimental procedure and results are presented in Section V. Finally, concluding statements are made in Section VI.
+
+## II Signal Model
+
+Consider an array of \(M\) microphones and a desired signal source in the far field of the array emitting a signal \(s\). Propagation of the signal to the array is modeled in the time-domain as
+
+\[x_{\Omega}(n)=\alpha s(n-\tau_{\Omega})+v_{\Omega}(n),\quad l=0,1,\ldots,M-1 \tag{1}\]

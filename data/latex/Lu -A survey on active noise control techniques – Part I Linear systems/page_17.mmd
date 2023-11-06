@@ -1,0 +1,19 @@
+utilized. Only one subband reference signal and one update direction are employed to approximate the phase response of the residual secondary path. Then, the coefficients of the full-band adaptive controller are directly adapted in time-domain.
+
+_3) Subband ANC algorithms for impulsive noise_
+
+The above mentioned SAF algorithm may fail to work in the presence of impulsive noise since the adaptation is based on the MMSE criterion. To fill this gap, a VSS normalized SAF (VSS-NSAF) was introduced for ANC system, whose step size is adapted to prevent the wrong update by impulsive noise [212]. Since impulsive noise is a great challenge for ANC systems, we summarize the above mentioned contributions of AINC In Table 4.
+
+#### 2.1.5 Lattice ANC algorithms
+
+The lattice filter is also an important architecture in ANC systems. Such structure can attenuate multiple sinusoidal interferences in ANC systems and its corresponding algorithm, i.e., the gradient adaptive lattice (GAL) algorithm, can provide a reliable performance as compared with the known algorithm [213; 214]. In the past decade, two VSS strategies have been suggested for the GAL algorithm, resulting in two VSS filtered-x GAL (VSS-FxGAL) algorithms [214; 215]. These algorithms exhibit good attenuation performance for hybrid narrowband and broadband noise. Very recently, a recursive least-squares lattice (RLSL) algorithm grouping the secondary path innovation (SPI) and lattice-order decision (LOD) was developed [216]. The SPI algorithm whitens the error signal into a virtual error signal just before the secondary path to generate virtual undesired signals corresponding to the output of the lattice filter. The LOD algorithm determines the order of the lattice filter, while considering the noise reduction performance. As a consequence, a faster convergence rate and lower computational complexity is achieved as compared to the FxRLS algorithm.
+
+\begin{table}
+\begin{tabular}{p{85.4pt}|p{85.4pt}|p{85.4pt}|p{85.4pt}} \hline \hline
+**Akhtar’s algorithm and its variants** & **FxlogLMS** & **HOEP/FLOM based algorithms** & **Soft bound algorithms** \\ \hline
+[177; 187] & [180] & [147; 144; 178] & [189] \\
+[193; 188] & & [182; 183; 184; 185; 186; 187] & [189] \\ \hline
+**M-estimate based algorithms** & **FxAP-based algorithms** & **FxRLS-based algorithms** & **SAF-based algorithms** \\ \hline
+[190; 191; 192; 193] & [199] & [202; 203] & [212] \\ \hline \hline \end{tabular}
+\end{table}
+Table 4: Contributions of AINC in the past decade.

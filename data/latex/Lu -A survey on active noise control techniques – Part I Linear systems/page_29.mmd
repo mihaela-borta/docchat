@@ -1,0 +1,17 @@
+error signal in this model can be defined by
+
+\[e(n)\triangleq d_{v}(n)-\hat{s}_{v}(n)*\hat{y}_{v}(n) \tag{14}\]
+
+where \(\hat{s}_{v}(n)\) is the impulse response of \(\hat{S}_{v}(z)\) and \(d_{v}(n)\) denotes the primary disturbance at the virtual location. Due to the additional calculations from three transfer functions, \(\hat{S}_{p}(z)\), \(\hat{S}_{v}(z)\), and \(\mathcal{G}(z)\), the FxLMS algorithm with virtual microphone (virtual FxLMS algorithm) has increased computational complexity as compared to the FxLMS algorithm. To reduce computational complexity, the algorithm in [277] provides a solution by resorting to the frequency-domain method, which also has better performance than the traditional virtual FxLMS algorithm.
+
+To evaluate the performance of the ANC algorithm, another idea is to utilize the acoustic pressure (sound pressure), which is estimated based on the acceleration measurements at the stages of tuning and operating [278].
+
+### Frequency mismatch
+
+In 2006, Xiao et al. proposed that the actual frequency of the primary noise and the frequency of the synthesized reference signal in NANC systems may be mismatch [279]. To explore the effect of mismatch, the FxLMS algorithm was analyzed from the perspective of frequency mismatch and phase error [280]. The results showed that the ANC system may undergo severe performance degradation even if the frequency mismatch is only 1%. Several algorithms were proposed to compensate for this mismatch, including [281; 282; 283]. The ANF can provide accurate estimation of frequency and it has been used to enhance performance [168]. In [284], a parallel ANF was proposed, where multiple tones were separated in the feedback reconstruction process to reduce the negative effect of frequency interference.
+
+### Design of feedback ANC systems
+
+As we discussed in the Introduction, the feedback ANC systems do not require a coherent reference signal and can be used in the case that the reference signal is not available. The main contributions of the feedback ANC systems before the past decade are summarized in Table 13. During the past decade, such systems have been widely used to ANC headphones and fMRI acoustic noise control, etc (see 'Recent implementations and applications of ANC' in Part II).
+
+The feedback ANC systems can be divided into two categories: non-adaptive systems and adaptive systems. The non-adaptive systems can effectively attenuate noise with frequency band

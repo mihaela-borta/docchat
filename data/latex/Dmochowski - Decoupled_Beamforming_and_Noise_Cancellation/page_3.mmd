@@ -1,0 +1,41 @@
+the transfer function of the Wiener solution. A delay of \(L\) samples has been included after the desired signal beamformer to ensure causality in the noise canceller transfer function. Each beamformer consists of a bank of finite impulse response (FIR) filters. The beamformer for the desired signal is denoted by
+
+\[\mathbf{W}_{d}^{H}(e^{\beta\Omega})=\left[W_{d,0}^{*}(e^{\beta\Omega})\ W_{d,1}^{*}(e^{ \beta\Omega})\ \cdots\ W_{d,M-1}^{*}(e^{\beta\Omega})\right], \tag{8}\]
+
+Likewise, the beamformer for the interfering signal, whose output feeds the reference noise canceller input, is
+
+\[\mathbf{W}_{r}^{H}(e^{\beta\Omega})=\left[W_{r,0}^{*}(e^{\beta\Omega})\ W_{r,1}^{*}(e^{ \beta\Omega})\ \cdots\ W_{r,M-1}^{*}(e^{\beta\Omega})\right]. \tag{9}\]
+
+Suppressing the dependence on frequency for brevity, it easily follows that the output of the BF-NC structure is
+
+\[Z=\left(\mathbf{W}_{d}^{H}-W_{\mathrm{NC}}^{*}\mathbf{W}_{r}^{H}\right)\mathbf{X}. \tag{10}\]
+
+The power-spectral density (PSD) of the output signal is then
+
+\[\Phi_{\mathrm{ZZ}}=\left(\mathbf{W}_{d}^{H}-W_{\mathrm{NC}}^{*}\mathbf{W}_{r }^{H}\right)\mathbf{\Phi_{\mathrm{XX}}}(\mathbf{W}_{d}-W_{\mathrm{NC}}\mathbf{ W}_{r}) \tag{11}\]
+
+where \(\mathbf{\Phi_{\mathrm{XX}}}=E\{\mathbf{XX}^{*}\}\) is the cross-spectral density (CSD) matrix of the array input. From [12], the Wiener solution of the noise canceller is given by
+
+\[W_{\mathrm{NC}}=\frac{\mathbf{W}_{r}^{H}\mathbf{\Phi_{\mathrm{XX}}}|_{ \mathrm{adaptation}}\mathbf{W}_{d}}{\mathbf{W}_{r}^{H}\mathbf{\Phi_{\mathrm{XX}}}|_{ \mathrm{adaptation}}\mathbf{W}_{r}} \tag{12}\]
+
+where \(\mathbf{\Phi_{\mathrm{XX}}}|_{\mathrm{adaptation}}\) is the CSD matrix of the array input during the adaptation period. From (10) and (11), it is evident that the decoupled BF-NC structure is effectively an adaptive beamformer with weights given by
+
+\[\mathbf{W}_{\mathrm{effective}}=\mathbf{W}_{d}-\frac{\mathbf{W}_{r}^{H}\mathbf{ \Phi_{\mathrm{XX}}}|_{\mathrm{adaptation}}\mathbf{W}_{d}}{\mathbf{W}_{r}^{H} \mathbf{\Phi_{\mathrm{XX}}}|_{\mathrm{adaptation}}\mathbf{W}_{r}}\mathbf{W}_{r} \tag{13}\]
+
+Therefore, the structure of Fig. 2 may be implemented in the canonical beamformer form (i.e., a bank of FIR filters). The notation of (13) simplifies the evaluation of decoupled BF-NC structures. A simple decoupled BF-NC structure with two delay-and-sum beamformers (DSBs) and a single channel noise canceller is presented in [14]. Using the model of Fig. 2, the structure is defined as:
+
+\[\mathbf{W}_{d}^{H}= \frac{1}{M}\mathbf{d}_{s}^{H}=\frac{1}{M}\begin{bmatrix}1&e^{ \beta\Omega\tau_{1}^{s}}&\cdots&e^{\beta\Omega\tau_{M-1}^{s}}\end{bmatrix} \tag{14}\] \[\mathbf{W}_{r}^{H}= \frac{1}{M}\mathbf{d}_{i}^{H}=\frac{1}{M}\begin{bmatrix}1&e^{ \beta\Omega\tau_{1}^{s}}&\cdots&e^{\beta\Omega\tau_{M-1}^{s}}\end{bmatrix} \tag{15}\]
+
+where \(\mathbf{d}_{s}\) and \(\mathbf{d}_{i}\) are the propagation vectors of the signal and interference, respectively, \(\tau_{k}^{s}\) is the relative propagation delay between microphones 0 and k for the desired signal source, and \(\tau_{k}^{i}\) is the relative propagation delay between microphones 0 and k for the interference source. In other words, the upper beamformer is a DSB steered to the signal source, while the lower beamformer is a DSB steered to the interference. Using (12), and assuming that the adaptation is performed with only the interference source active, the Wiener solution of this structure is easily found to be
+
+\[W_{\mathrm{NC}}=\frac{1}{M}\mathbf{d}_{i}^{H}\mathbf{d}_{s}. \tag{16}\]
+
+Therefore, for this structure
+
+\[\mathbf{W}_{\mathrm{effective}}=\frac{1}{M}\mathbf{d}_{s}-\frac{1}{M^{2}} \mathbf{d}_{i}^{H}\mathbf{d}_{s}\mathbf{d}_{i}, \tag{17}\]
+
+One advantage of employing such a structure is the reduced complexity: only a single adaptive filter is needed. Furthermore, note that the desired signal cancellation phenomenon that occurs as a result of the sensitivity of the blocking matrix is averted, as one is no longer steering the reference beamformer to the desired signal. The key to avoiding signal cancellation is to minimize the SIR at the reference noise canceller input(s) [12]. In the decoupled BF-NC, if the steering direction of the interference is misjudged, the SIR at the adaptive filter input will increase by an amount proportional to the slope of the interference beam's main lobe. Conversely, in the GSC, a steering error leads to a SIR increase proportional to the slope of the null of the blocking matrix. Nulls are steeper than beams, and therefore, the error is expected to be more costly in the GSC.
+
+The structure in Fig. 2 is applicable to environments with a single interference source. The structure may easily be generalized to an arbitrary number of interferers by adding a lower branch for every additional source of interference. Each additional branch consists of a DSB steered to the corresponding interference source, and an adaptive filter to remove this interference from the primary input.
+
+Fig. 2: Decoupled BF-NC with single interference source.

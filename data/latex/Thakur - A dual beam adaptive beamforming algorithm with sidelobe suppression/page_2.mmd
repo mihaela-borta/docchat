@@ -1,0 +1,49 @@
+the SLL [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]. The MVDR beamformer is modified in Ref. [11] to minimize the SLL. Multiple quadratic constraints have been incorporated in the entire region outside the mainlobe area so that the level of sidelobes stays below a certain value. Although, the technique minimizes the SLL, but they are applying too many constraints on the already defined region and it may overconstraint the problem which can render an infeasible solution. Some evolutionary optimization approaches have been used in Refs. [12, 13, 14] to control the SLL but due to their iterative nature, they may take a long time to converge which sometimes restricts their usage in a practical environment. Further, a gravitational search algorithm has been illustrated in Ref. [16] for finding the optimal weight vector to reduce the SLL. The search process is highly random and not strictly confined to global search. The efficiency of search based algorithm completely rely on its searching ability and the final solution obtained may not be optimal. The convex optimization-based methods [17, 20] have also been reported in the literature to control SLL. In Ref. [20], sidelobe subspace is formed that includes the entire sidelobe region. A large number of angles of sidelobe subspace are sampled and the powers corresponding to these angles are suppressed to reduce the sidelobe level. However, it is not clearly indicated that how many angles should be taken in the sidelobe subspace for guaranteed sidelobe suppression.
+
+In this work, an adaptive beamforming algorithm is developed not only to steer the beams in two distinct desired directions and suppressing the interferences but also controls the SLL. To achieve the goal of dual beam, the optimization problem of the SCB is modified by including an additional constraint in it. It essentially involves the construction of a new steering vector corresponds to the second desired direction and its response is constrained to unity. Further, to control the SLL, four regions of interests (ROIs) around the dual beams are selected and the responses of these ROIs are constrained to a specified level. The widths of ROIs are set in accordance to the beamwidth between first minimas (BWFM) of the two main beams. Moreover, a limited number of constraints are applied on each ROI so as not to overconstaint the optimization problem. For this particular optimization problem, an empirical formula is obtained to calculate the overall constraint number and the formula is verified by utilizing it for several runs. The optimization problem of dual beam beamformer is reformulated by employing additional inequality constraints in the ROIs. The additional constraints ensures that the responses of ROIs stays below the predetermined level.
+
+Thus, the proposed algorithm can be used to receive two desired signals from two distinct directions simultaneously. Along with receiving the two desired signals, it can control the sidelobe level by minimizing it to a specified level, making the algorithm less vulnerable to unexpected interferences near main beams. In the medical imaging domain, the characteristics of the main beams have a significant impact on the quality of the image. The width of the main beams decides the resolution of the system and the contrast is managed by the SLL [22]. The proposed algorithm can deal with two targets simultaneously via dual beams and can maintain the contrast by offering low SLL. A limitation of reducing SLL is that a little widening of the main beams, which is expected because as reducing the power of sidelobes in the radiation pattern may cause accumulation of power near main beams.
+
+The remainder of the article is organized in the following way. The mathematical formulation of the signal model and optimization problem of SCB are derived in section 3. The formulation of the proposed algorithm for dual beams and SLL reduction is discussed in sections 4 and 5 respectively. The performance of the proposed algorithm is evaluated by simulations results which are given in section 6. Lastly, the conclusion of this work is drawn in section 7.
+
+## 2 System model
+
+Consider N desired signals and J interfering signals received by a uniform linear array (ULA) of M uniformly spaced by half-wavelength antenna elements. For a particular kth snapshot the received vector of data \(\mathbf{x}(\mathbf{R})_{M<1}\) is denoted as:
+
+\[\mathbf{x}(k)=A_{\mathbf{s}_{\alpha}}(k)+A_{\mathbf{s}_{l}}(k)+\mathbf{n}(k),\quad k=1,2,...,K \tag{1}\]
+
+where K is the total number of snapshots and \(\mathbf{n}(k)\) is the noise vector. \(\mathbf{A}_{\alpha}\) and \(\mathbf{A}_{l}\) represent the steering vector matrices of desired signals and interfering signals, respectively.
+
+\[A_{\alpha}=[\mathbf{a}(\theta_{\alpha}),\mathbf{a}(\theta_{\alpha}),...,\mathbf{a}(\theta _{\alpha})]_{M<N} \tag{2}\]
+
+\[A_{i}=[\mathbf{a}(\theta_{i_{\alpha}}),\mathbf{a}(\theta_{\alpha}),...,\mathbf{a}(\theta _{\alpha})]_{M<J} \tag{3}\]
+
+and the vectors of incident desired signals and interfering signals are represented by \(\mathbf{s}_{\alpha}\) and \(\mathbf{s}_{\alpha}\) respectively.
+
+\[s_{\alpha}=[x_{\alpha_{1}},s_{\alpha_{2}},...,s_{\alpha_{m}}]_{M<1} \tag{4}\]
+
+\[s_{i}=[s_{i_{1}},s_{\alpha_{2}},...,s_{\alpha}]_{M<1} \tag{5}\]
+
+with \(\mathbf{a}(\theta_{\alpha_{\alpha}})\), n = 1,2,,N represent the steering vectors of desired signals with the directions of arrival (DOAs) of \(\theta_{\alpha_{\alpha}}\) and \(s_{\alpha_{\alpha}}\) are the associated signals.
+
+\(\mathbf{a}(\theta_{\alpha_{\alpha}})\), j = 1,2,...J are the steering vectors of interfering signals with the DOAs of \(\theta_{\lambda}\) and \(\mathbf{s}_{\lambda}\) are the corresponding signals.
+
+The steering vector \(\mathbf{a}(\theta)\) with DOA _theta_ for M antenna elements separated by half wavelength is written as
+
+\[\mathbf{a}(\theta)=[1,e^{\mu\theta\theta\theta\theta},...,e^{\mu\theta\theta(M-1 )\mu\theta\theta}]^{T} \tag{6}\]
+
+where, \(\beta=\frac{2\pi}{K}\), \(\lambda=\oint_{\lambda}\), c is the speed of light and f is the frequency of operation. \(d=\oint_{\lambda}\) is the distance between the antenna elements. (J\({}^{T}\) denotes the transpose operation. The output power of a beamformer with weight vector \(\mathbf{w}\) and received data vector \(\mathbf{x}(k)\) can be determined as
+
+\[\begin{array}{ll}\mathit{output}&\mathit{power}&=E[\langle\mathbf{w}^{H}\mathbf{x}( k)\rangle^{\dagger}]\\ &=\mathbf{w}^{H}\mathbf{R}\mathbf{w}\end{array} \tag{7}\]
+
+where, \((\mathbf{y}^{H}\) denotes the Hermitian operator and \(E\) is the mathematical expectation. \(\mathbf{R}=E(\mathbf{x}(k)\mathbf{x}^{H}(k))\) is the array covariance matrix and can be written as
+
+\[\mathbf{R}=\mathbf{R}_{\alpha}+\mathbf{R}_{i+\mathbf{n}} \tag{8}\]
+
+where, \(\mathbf{R}_{\alpha}\) and \(\mathbf{R}_{i+\mathbf{n}}\) are the covariance matrices of desired signals and interference signals, respectively.
+
+\[\mathbf{R}_{\alpha}=\sum\nolimits_{i=1}^{N}\sigma_{\alpha}^{2}\mathbf{a}(\theta_{ \alpha_{\alpha}})\mathbf{a}(\theta_{\alpha_{\alpha}})^{H} \tag{9}\]
+
+\[\mathbf{R}_{i+\mathbf{n}}=\sum\nolimits_{j+1}^{J}\sigma_{\alpha}^{2}\mathbf{a}(\theta_{ \alpha_{\beta}})\mathbf{a}(\theta_{\alpha_{\beta}})^{H}+\sigma_{j}^{2}\mathbf{I} \tag{10}\]
+
+where, \(\

@@ -1,0 +1,19 @@
+where \(\mathbf{e}(n)=[e(n),e(n-1),\ldots,e(n-P+1)]^{\rm T}\), \(\mathbf{U}(n)=[\mathbf{x}(n),\mathbf{x}(n-1),\ldots,\mathbf{x}(n-P+1)]\) is a \(M\times P\) matrix, and \(P\) denotes the projection order.
+
+In [195, 194], the transient and steady-state performance of the FxAP algorithm was analyzed for multi-channel ANC systems, which is based on the energy conservation argument and does not require a specific characteristic of the signal. The optimal VSS-FxAP algorithm was developed by performing analysis of mean square deviation (MSD) and its non-stationary version was also proposed [196]. A more accurate result was presented in [197, 198], which conducts the augmented weight-error vector for convergence analysis.
+
+_2) FxAP-based algorithms for impulsive noise_
+
+The above mentioned algorithms are also challenged by the difficulty of converging in the presence of impulsive noise. A simple, yet effective approach for AINC was proposed in [199], which is derived by introducing the efficient AP sign (APS) algorithm into ANC systems, resulting in the FxAPS algorithm. Additionally, two extensions regarding a VSS scheme and partial update (PU) were developed.
+
+#### 2.1.3 Filtered-x RLS-based algorithms
+
+_1) FxRLS-based algorithms for broadband noise_
+
+The standard FxRLS algorithm can converge faster than the FxLMS algorithm, at the price of increased complexity [200]. As such, the RLS algorithm has been extended to ANC systems in recent years. In [200], a hybrid algorithm, which can switch between the filtered-x NLMS (FxNLMS) and FxRLS algorithms, was proposed for functional magnetic resonance imaging (fMRI) acoustic noise control. The FxRLS algorithm is adopted at the initial convergence stage for obtaining fast convergence. Once detected it stops converging, the hybrid algorithm switches to the FxNLMS algorithm for low residual error. By doing this, the overall attenuation performance can be better than that of the individual FxRLS and FxNLMS components.
+
+_2) FxRLS-based algorithms for narrowband noise_
+
+There is scarce literature focused on using the FxRLS-type algorithm for NANC. In [201], a filtered-x optimally weighted RLS (FxOWRLS) algorithm was derived for both feedforward and feedback ANC systems with bounded narrowband disturbances, which can reduce the computational burden by reducing the update ratio in the adaptation process.
+
+_3) FxRLS-based algorithms for impulsive noise_

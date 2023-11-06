@@ -1,0 +1,9 @@
+In [202], to suppress the effect of the impulsive noise, a logarithmic cost function has been employed with the consideration of _communication error_ in the error signal. Following this work, several FxRLS variants have been developed for AINC [203; 204]. In [203], a modified FxRLS algorithm was proposed by addition of state-space for AINC. The filtered-x recursive maximum correntropy (FxRMC) algorithm [204] presented an information theoretic learning (ITL) approach for AINC. Moreover, an adaptive kernel size scheme was introduced. Note that such maximum correntropy criterion (MCC) can also be utilized in NLANC systems, see Part II of this work. Another FxRLS-based algorithm for AINC was proposed in [205], where Akhtar's scheme [177] was incorporated with the modified gain method.
+
+#### 2.1.4 Subband ANC algorithms
+
+_1) Subband ANC algorithms for broadband noise_
+
+To deal with the long channel responses and colored inputs in ANC systems, the subband adaptive filter (SAF) was developed for fast convergence and low computational complexity [206]. A typical SAF based on multi-band structure with \(N\) subbands can be seen in Fig. 7. The signal \(d(n)\) and \(X(n)\) are decomposed through the analysis filters \(H_{i}(z)\), \(i=0,\ldots,N-1\). The subband reference signals \(X_{i}(k)\) are filtered by the adaptive filter to generate the subband output signals \(y_{i}(n)\). Then, the subband signals \(d_{i}(n)\) and \(y_{i}(n)\) are critically decimated to lower sampled rate sequences \(d_{i,D}(k)=d_{i}(kN)\) and \(y_{i,D}(k)=y_{i}(kN)\), where \(n\) and \(k\) are used to index the original sequences and the decimated sequences. The factor \(D\) denotes the decimation factor, which is chosen as same as the number of the subband filters to prevent aliasing of the signals. Finally, the decimated error signal \(e_{i,D}(k)=d_{i,D}(k)-y_{i,D}(k)\) is utilized for adjusting of the subband ANC
+
+Figure 7: Diagram of the multi-band structured SAF.

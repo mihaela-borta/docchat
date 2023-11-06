@@ -1,0 +1,17 @@
+i.e., the adaptive weights obtained using the MOE and Max SINR criteria are proportional to each other. Since multiplicative constants in the adaptive weights do not matter, these two techniques are therefore equivalent.
+
+To show that the MMSE weights (Wiener filter) and the MOE weights are equivalent, we start with the definition of \({\bf r}_{xd}\),
+
+\[{\bf r}_{xd} = {\rm E}\left\{{\bf x}d^{*}(t)\right\}, \tag{21}\] \[= {\rm E}\left\{{\left[\alpha{\bf h}_{0}\,+\,{\bf n}\right]d^{*}(t )}\right\}.\]
+
+Note that the term \(\alpha=\beta d(t)\), where \(\beta\) is some amplitude term and \(d(t)\) is the reference signal. Therefore,
+
+\[{\bf r}_{xd} = \beta|d|^{2}{\bf h}_{0}+{\rm E}\left\{{\bf n}\right\}d^{*}(t) \tag{22}\] \[= \beta|d|^{2}{\bf h}_{0}\] \[\propto {\bf h}_{0}\] \[\Rightarrow{\bf w}_{\rm MMSE} \propto {\bf w}_{\rm MOE}\]
+
+i.e., the MMSE weights and the MOE weights are also equivalent. Therefore, theoretically, all three approaches yield the same weights starting from different criteria for optimality. We will see that these criteria are very different _in practice_.
+
+### Suppression of Interference
+
+We can use the matrix inversion lemma to determine the response of the optimal beamformer to a particular interference source. Since all three beamformers are equivalent, we can choose any one of the three. We choose the MOE. Within a constant, the optimal weights are given by \({\bf w}={\bf R}^{-1}{\bf h}_{0}\). Denote as \({\bf Q}\) the interference correlation matrix without the particular interference source (assumed to have amplitude \(\alpha_{i}\), with \({\rm E}\left\{|\alpha_{i}|^{2}\right\}=A_{i}\), and spatial signature \({\bf h}_{i}\). In this case,
+
+\[{\bf R} = {\bf Q}+{\rm E}\left\{{\left|\alpha\right|^{2}}\right\}{\bf h}_{i }{\bf h}_{i}^{H}\] \[= {\bf Q}+A_{i}{\bf h}_{i}{\bf h}_{i}^{H}\] \[\Rightarrow{\bf R}^{-1} = {\bf Q}^{-1}-\frac{A_{i}^{2}{\bf Q}^{-1}{\bf h}_{i}{\bf h}_{i}^{H }{\bf Q}^{-1}}{1+A_{i}^{2}{\bf h}_{i}^{H}{\bf Q}^{-1}{\bf h}_{i}}\]

@@ -1,0 +1,16 @@
+algorithm was conducted based on the method in [133] which considers the general secondary path cases. Aiming at revealing the convergence property of ANC systems with online secondary path estimation, the analysis of the broadband FxLMS algorithm was performed in [136]. In [137], an interesting trial was attempted to introduce the statistical-mechanics approach to analyze the FxLMS algorithm. According to this theory, the models and variables are represented by the cross-correlation between the elements or the auto-correlation of the elements. By making use of differential equations, the dynamical behaviors of the direction cosines among the vectors of an adaptive filter, the shifted filters, and an unknown system are described as the macroscopic variables. Such approach does not employ the independence assumption and small step size condition, which are widely used in the other studies. Follow-up works can be seen in [138, 139].
+
+By assuming an exact secondary path model and the root locus analysis method, the behavior of the FxLMS-based ANC systems was investigated in [140, 141, 142]. By further adding the error of secondary path model in root locus analysis of the FxLMS algorithm, the effect of the secondary path model was clearly illustrated in [143]. Analysis results showed that the FxLMS algorithm can be guaranteed to converge when \(\hat{S}(z)\) and \(S(z)\) have the same signs. Moreover, it confirms the existence of a simple secondary path model whose single non-zero coefficient can maintain the performance of the FxLMS algorithm [143].
+
+\(\bullet\)_Leaky algorithm:_ In certain scenarios, the conventional FxLMS algorithm may suffer from
+
+\begin{table}
+\begin{tabular}{c|p{142.3pt}|p{142.3pt}|p{142.3pt}|p{142.3pt}} \hline
+**Years** & **Authors** & **Conditions** & **Contributions** & **References** \\ \hline
+1989 & Long, Ling, and Proakis & The secondary path is a delay system and the input signal is a broadband white signal & Analysis of behavior of the delayed LMS algorithm & [126, 127] \\ \hline
+1995 & Bjarnason & The secondary path is a delay system and the input signal is a Gaussian or colored Gaussian signals & Analysis of the algorithm with offline and online estimation of the error-path filter & [128] \\ \hline
+2000 & Tobias, Bermudez, and Bershad & Imperfect secondary path estimation and the input signal is a white or colored reference signals & Analysis of the FxLMS algorithm without independent assumption & [129] \\ \hline
+2007 & Frananje et al. & Asymptotically convergence of FxLMS & Analysis of the robustness of the FxLMS algorithm & [130, 131] \\ \hline
+2007 & Barrault, Bermudez, and Lenzi & Performance of FxLMS in a finite duct & Using a stochastic differential equation (SDE) to analyze the performance of the FxLMS algorithm & [132] \\ \hline \end{tabular}
+\end{table}
+Table 2: Development of FxLMS analysis before the past decade.

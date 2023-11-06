@@ -1,0 +1,21 @@
+output is subtracted from the reference sensor signal \(c(n)\). Finally, a (somewhat) acoustic-feedback-free reference signal \(u(n)\) is obtained for adaptation of the control filter. The FBPN filter can be adapted offline or online. In many applications, \(F(z)\) may be time-varying. Hence, online acoustic feedback modeling and neutralization are needed.
+
+During the past decade, several algorithms have been proposed for online acoustic feedback path modeling and neutralization [8, 266, 267, 268, 269]. Similar to the online secondary path estimation, an auxiliary noise modeled by white Gaussian noise is injected to an ANC system for online modeling feedback path. In [267], a novel VSS scheme was proposed for FBPN filter and then it extended to multi-channel ANC systems. With slightly increased computational complexity, it achieves faster convergence than that of previous algorithms. Following a different direction, the algorithms in [268, 269] developed a time-varying gain scheme for white Gaussian noise generation. Since the auxiliary noise contributes to the residual error, the attenuated performance is degraded. By using the time-varying gain scheme, the lower noise level can be achieved.
+
+### Measurement of error signal
+
+We briefly revisit the measurement method of the error signal in this subsection. In this context, the literature is rather scarce. Some contributions of the error signal measurement before the past decade are listed in Table 12. In [202], the concept of the _communication error_\(e_{c}(n)\) was applied to ANC algorithms, which can be expressed as
+
+\[e_{c}(n)=e(n)-s(n)*[\boldsymbol{w}^{\mathrm{T}}(n)\boldsymbol{x}(n)]+ \boldsymbol{w}^{\mathrm{T}}(n)\boldsymbol{X}(n). \tag{12}\]
+
+\begin{table}
+\begin{tabular}{c|l|l|l} \hline
+**Years** & **Authors** & **Contributions** & **References** \\ \hline
+1992 & Elliott, & & \\  & and David & & \\ \hline
+1999 & Roure and & & \\  & Albarrazin & Remote microphone technique & [271] \\ \hline
+2002 & Cazzolato & LMS filter with virtual microphone technique & [272] \\ \hline
+2006 & Diaz, Egana, & & \\  & and Vinolas & & \\ \hline
+2007 & Liao and Lin & & \\  & & & \\ \hline
+2008 & Petersen & & \\  & et al. & & \\ \hline \end{tabular}
+\end{table}
+Table 12: Fundamental of the error signal measurement before the past decade.

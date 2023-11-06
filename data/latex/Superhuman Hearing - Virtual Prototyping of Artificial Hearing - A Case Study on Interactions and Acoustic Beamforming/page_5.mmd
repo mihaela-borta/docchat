@@ -1,0 +1,49 @@
+on the HTC Vive headset3 connected to a 64 bit Desktop PC with an i7-4770K CPU, 16 GB of RAM, and a NVIDIA GEFORCE GTX 1070. Moreover, binocular Pupil Lab Eye Tracker4 allowed the extraction of eye gaze data. For the audio reproduction, a pair of Semhester iHD600 was combined with a headphone-specific equalization filter, which was convolved with low-latency through _Equalizer APO software5_. Such compensation filters were computed averaging the headphone impulse response measurements over more than 100 users from the Acoustic Research Institute of the Austrian Academy of Sciences6. The data are available in SOFA format [9]. This equalization process removes the acoustic headphone contribution, and thus reduces spectral coloration.
+
+Footnote 3: [https://www.vive.com/us/product/vive-virtual-reality-system/](https://www.vive.com/us/product/vive-virtual-reality-system/)
+
+Footnote 4: [https://pupil-labs.com](https://pupil-labs.com)
+
+Footnote 5: [https://sourceforge.net/projects/equalizerapo/](https://sourceforge.net/projects/equalizerapo/)
+
+Footnote 6: [http://sofacoustics.org/data/headphones/ari](http://sofacoustics.org/data/headphones/ari)
+
+### Binaural rendering of Ambisonics
+
+For the development of a virtual prototyping framework able to simulate a sound field with multiple sources, and with independent control over their sound propagation, an accurate rendering of the spatial information around the listener is necessary. In this section, the study-specific encoding and binaural decoding of a virtual sound field are explained in order to provide perceptually plausible real-time simulations.
+
+Ambisonics technique is here used for the reproduction of a full 3D virtual acoustical space [17]. A Higher Order Ambisonics (HOA) system provides a scalable solution for wave equation approximation with an increasingly accurate encoding of spatial information for a given three-dimensional volume of space [52]. The rendering process depicted in Fig. 3 consists of a decoder that can weigh the sound pressure in a spherical surface to a finite number of (virtual) loudspeakers array and/or binaural filters over headphones.
+
+#### 3.2.1 Spherical Harmonics
+
+The spherical harmonics represent the sound decomposition into frequency, radial, and angular functions [71], into what leads to the Fourier-Bessel series for a position vector \(\vec{r}=(r,\theta,\varphi)\)[17].
+
+\[p(\vec{r})=\sum_{m=0}^{\infty}\vec{r}^{m}j_{m}(kr)\sum_{0\leq n\leq n,\theta =\pm 1}B_{mn}^{n}r_{mn}^{\alpha}(\theta,\varphi) \tag{1}\]
+
+with \(i=\sqrt{-1}\), \(k=2\pi f/c\), \(c\) the speed of sound, and \(\sigma\pm 1\) the spin value. For each term of the order \(m\), a radial, spherical Bessel function \(j_{m}(kr)\) is associated with angular functions \(Y_{\sigma}^{m}(\theta,\varphi)\) called spherical harmonics, which define an orthonormal basis within a spherical coordinates system. \(B_{\sigma}^{m}\) represents the projection of the acoustic pressure on this basis [17, 71].
+
+The aim is the re-synthesis of sound sources from particular spatial directions, either by reproducing dedicated Ambisonics microphone recordings or synthetic signals. Considering an audio signal \(f(t)\), which arrives from a certain direction, the representation of the surround audio signal \(f(\theta,\varphi,t)\) is constructed using a spherical harmonic expansion up to a truncation order \(N\).
+
+\[f(\theta,\varphi,t)=\sum_{n=0}^{N}\sum_{m=-n}^{n}Y_{n}^{m}(\theta,\varphi) \phi_{mn}(t) \tag{2}\]
+
+where \(Y_{n}^{m}\) represents the spherical harmonics of order \(n\), degree \(m\) and \(\phi_{mn}(t)\) the expansion coefficients. With increasing order N, the expansion results in a more precise spatial representation. Spherical harmonics are composed of a normalization term \(N_{n}^{|m|}\), the associated Legendre function \(P_{n}^{m}\) and the trigonometric function [18, 41, 71].
+
+\[Y_{n}^{m}(\theta,\varphi)=N_{n}^{|m|}P_{n}^{m}(sin(\varphi))\begin{cases}sin( |m|\,\theta)&m<0\\ cos(|m|\,\theta)&m\geq 0\end{cases} \tag{3}\]
+
+\(P_{n}^{m}(x)\) are the associated Legendre functions [73].
+
+#### 3.2.2 Higher Order Ambisonics
+
+Considering our use of Resonance Audio implementation, Ambsonic Channel Number (ACN) and SN3D normalization are used in Eq. 2 and 3. ACN defines the ordering sequence for the spherical harmonics channels as \(ACN=n^{2}+n+m\). The normalization term used is SN3D, often seen in combination with ACN, takes the form of:
+
+\[N_{n}^{|m|}=\sqrt{(2-\delta_{m})}\frac{(n-|m|)!}{(n+|m|)!} \tag{4}\]
+
+with the Kronecker-delta \(\delta_{m}\) is one for \(m=0\) and zero otherwise.
+
+Using this index neatly defines a sequence for the spherical harmonics \(Y_{n}^{m}(\theta,\varphi)=Y_{ACN}(\theta,\varphi)\) and the ambisonic signals \(\Phi_{ACN}(t)\) to stack them in the following vector
+
+\[y(\theta,\varphi)=\begin{pmatrix}Y_{0}(\theta,\varphi)\\ \cdots\\ Y_{(N+1)^{2}-1}(\theta,\varphi)\end{pmatrix}. \tag{5}\]
+
+The spherical domain components can be considered as the reconstruction of the wave field around the origin using a set number of microphones with multiple directivity patterns that define the magnitude of the signal and the direction of arrival. The higher the order of Ambisonics, the more directivity patterns are assumed with a narrowed region of sensibility and thus a higher spatial resolution could
+
+Figure 3: Simplified block diagram for binaural rendering with Resonance Audio.

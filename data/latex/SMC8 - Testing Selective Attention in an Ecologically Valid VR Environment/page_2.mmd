@@ -1,0 +1,27 @@
+# Testing Selective Attention in an Ecologically Valid VR Environment
+
+###### Abstract
+
+Individuals with hearing impairment are known to have more difficulty selectively attending to a sound source in an environment with many competing sound sources. Traditional lab-based testing may lack ecological validity, so there is a need for a testing method that emulates real-world conditions. This paper presents a virtual environment developed using Unity and Steam Audio. It is designed to identify the users' challenges in selective attention through eye-tracking technology. Twelve individuals with normal hearing and one with hearing impairment tested the virtual environment. The hearing-impaired participant tested the environment normally, while the rest tested it either normally or with a high-frequency hearing loss simulator. The results indicate that with some further improvements, the environment may be a viable test environment to detect challenges in selective attention. However, further testing on people with hearing impairment is necessary to validate these results.
+
+Emil Sonderskov Hansen
+
+Aalborg University
+
+ehansen19@student.aau.dk Sara Osk Porsteinsdottir
+
+Aalborg University
+
+sthors22@student.aau.dk
+
+## 1 Introduction
+
+Auditory selective attention is a process that enables an individual to select and focus on a certain audio input while suppressing other distracting or irrelevant information [1]. While normal-hearing individuals usually do not have to give much thought to this process, individuals with hearing impairment have a harder time selectively attending to their source of interest when there are many competing sources [2]. For normal-hearing listeners, the ability to selectively attend relies on their ability to properly analyze the acoustic scene and form perceptual auditory objects properly [3]. However, hearing-impaired individuals have a harder time with auditory object formation, which may interfere with their ability to filter out competing sources [3]. Often visual and auditory attention is correlated, and adults tend to listen in the direction in which they are looking [4]. It is also known that the intelligibility of noisy speech increases when the listener can both see and hear the speaker [5].
+
+Lab-based testing, such as speech-in-noise testing, is frequently used when assessing an individual's ability to perceive sound when background noise is present [6, 7]. But, as these tests are not related to a real-life situation in a complex acoustic environment, the ecological validity of these tests can be questioned when compared to real-world results [6, 7, 8, 9]. One solution for creating more realistic environments for testing hearing ability (e.g., auditory attention) is using Virtual Reality (VR) to generate realistic audio-visual scenarios [8]. When high realism is reached, VR can be useful for simulating real-life situations [8, 10]. Furthermore, VR can be used for a fair trade-off between experimental control and ecological validity [10].
+
+To accurately model a realistic sound environment, it is essential to mimic how sound behaves in the real world. This involves modeling how the human ear perceives sound in 3D space and the acoustics of the given scene.
+
+Perceiving a sound source in 3D space involves distinguishing its angular direction (azimuth and elevation) and the distance to the sound source [11]. Before a sound wave reaches the human eardrums, it is diffracted by the human torso, shoulders, head, and pinnae, which modifies the sound spectrum [12]. To localize a sound, the human auditory system uses cues from (a) diffraction of the sound wave [11], (b) interaural time differences (ITD), and (c) interaural level differences (ILD) [13]. This modification of the sound wave can be very complex and vary significantly from person to person [12]. The direction-dependent cues for a specific person are often referred to as a Head-Related Transfer Function (HRTF) [14]. The information of the HRTF is typically captured by its equivalent Head-Related Impulse Response (HRIR), and for the cues to be entirely accurate, the HRIR should be measured for each listener [12, 14].
+
+When modeling acoustics in a real-world environment, a common method is to use recorded Room Impulse Responses (RIRs), which are then convoluted with a dry signal [15]. However, this method is limited, as the RIRs only represent the specific room and source-receiver configuration [16]. Therefore, to predict the acoustics of an arbitrary room and receiver/source position, alternative room modeling methods are required [16]. Room modeling methods can generate synthesized RIRs for arbitrary configurations to achieve this. The most commonly used methods for real-time purposes are ray-based methods, which are based on geometrical acoustics [16]. In geometrical acoustics, it is necessary to represent the material of each geometry with a scattering coefficient (i.e. the amount of sound reflected away from the specular reflection) [17], and an absorption coefficient (i.e., the amount of sound absorbed by the material) [18], to obtain reliable results in the computer simulation. For the implementation of room modeling, several

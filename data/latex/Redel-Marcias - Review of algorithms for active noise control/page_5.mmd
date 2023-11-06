@@ -1,0 +1,13 @@
+From the block diagram, see Figure 2b, the steady-state transfer function can be expressed as follows. The z-transform of the error signal is
+
+\[\mathrm{E(z)}=\frac{G_{\mathrm{T}}\left(z\right)}{1-\mathrm{C}(z)H_{\mathrm{e}} \left(z\right)}\mathrm{R}(z). \tag{3}\]
+
+where R(z), E(z) are, respectively, the noise and error signals; Y(z) is the output signal of the controller; G\({}_{\mathrm{r}}\)(z) is the transfer function between the noise source and the reference microphone, H\({}_{\mathrm{e}}\) (z) is the transfer function between the loudspeaker and the error microphone. This system can present instabilities and the feedback signal can oscillate from fixed frequency (Sievers and Flotow, 1992), for this reason a compensation filters are necessary in the system to prevent the positive feedback. An application of this system is the cancellation of noise by ANC in headphones (Bartles, 1992).
+
+### Multiple-Channel ANC system
+
+Many applications involve complex modal behavior, such as acoustic ANC in large ducts or enclosures and vibration ANC on rigid bodies or structures with multiple degrees of freedom. Sometimes the primary-noise source is more complicated, it is no longer sufficient to use a single error sensor to cancel it. These problems require the use of a multiple-reference/multiple output adaptive algorithm. The general multiple-channel ANC system consist of an array of sensors and secondary sources. A block diagram of a multiple channel ANC system can be described by the Figure 3.
+
+The number of secondary sources to achieve perfect primary source cancellation is the same as the number of acoustic modes being excited (Elliott, Boucher and Nelson, 1992). In fact, it is very difficult to obtain the perfect cancellation because of the acoustic modal density in enclosures increases rapidly with the frequency. In this cases, passive sound control methods tend to work best at higher frequencies, and thus complement ANC, which is more effective at lower frequencies.
+
+Figure 2: a) An ANC feedback system and b) Block diagram an ANC feedback system.

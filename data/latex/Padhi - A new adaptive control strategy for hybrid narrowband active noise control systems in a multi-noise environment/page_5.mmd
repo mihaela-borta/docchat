@@ -1,0 +1,20 @@
+\[\hat{\hat{d}}(k)=\hat{d}^{\prime}(k)*\hat{s}(k). \tag{25}\]
+
+The DFC estimates of the feedforward NANC controller are updated as
+
+\[\hat{a}(k+1)=\hat{a}_{i}(k)+\mu_{f}\big{[}\mathrm{e}(k)*\hat{x}_{a_{i}}(k)\big{]}, \tag{26}\]
+
+and
+
+\[\hat{b}_{i}(k+1)=\hat{b}_{i}(k)+\mu_{f}\big{[}\mathrm{e}(k)*\hat{x}_{b_{i}}(k) \big{]}. \tag{27}\]
+
+In the above equations, \(\mu_{f}\) is the adaptive filter step size. By observing (24), (26) and (27) we can conclude that both the subsystems of the HNANC system are updated by the same error signal. from (22), it can be seen that error signal comprises of two components, in which, the first component is crucial to adapt the feedforward controller at the same time it is a disturbance for the feedback controller. The second component acts as a disturbance to feedforward and properly adapts the feedback controller. In the HNANC system, there is significant performance degradation due to the problem of common error, hence in the next section, we propose a new adaptive control strategy for the HNANC system which yields improved noise control in a multi noise environment.
+
+## 4 Proposed adaptive control strategy for a new HNANC system
+
+In the previous sections, investigations on available ANC systems for a multi noise environment were carried out. From the analysis in the previous section, it is noteworthy that inaccurate error/reference signals for operating the adaptive filters caused slow convergence and yielded degraded ANC performance in the steady state. In the proposed adaptive control strategy, there are three subsystems in the HNANC system that work in tandem for effective noise cancellation in a multi noise environment. As can be seen from Fig. 4, the three subsystems are:
+
+* A modified feedforward NANC system that effectively counters the wideband noise that has correlation with the input signal and the sinusoidal interferences (firework noise) at multiple frequencies which affect the system causing severe performance degradation.
+* A firework noise canceler (FNC) which serves the dual purpose of providing the most accurate error/reference signals to both the subsystems in the HNANC system and then also to provide the most accurate energy estimate of the pre-processed error signal to calculate the variable momentum factor used by the FXWALMS algorithm to update the DFCs of the feedforward controller.
+
+Figure 4: Block diagram of the proposed HNANC system(\(\mathrm{\hat{r}th}\) channel).

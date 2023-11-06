@@ -1,0 +1,13 @@
+secondary path \(S(z)\) are modeled by an FIR filter with length 256 and 100, respectively. The filter length is set to 128 [147]. With similar convergence rate, the FxgsnLMS algorithm has the smallest noise residual in this scenario.
+
+#### 2.1.2 Filtered-x AP-based algorithms
+
+_1) FxAP-based algorithms for broadband noise_
+
+The AP algorithm updates the weights on the basis of multiple input vectors to accelerate convergence speed if driven by highly correlated input signals. For these reasons, it has become a good alternative to LMS-type controllers. The update equation for the basic FxAP algorithm is [194]
+
+\[\mathbf{w}(n+1)=\mathbf{w}(n)+\mu\mathbf{U}(n)\left[\mathbf{U}^{\rm T}(n)\mathbf{U}(n)\right]^{-1} \mathbf{e}(n) \tag{7}\]
+
+Figure 5: Score function of the FxLMS algorithm [9], FxlogLMS algorithm [180], FxsgnLMS algorithm [178], Huber’s-based FxLMS algorithm [190], and Hample’s-based FxLMS algorithm [190].
+
+Figure 6: ANRs of the representative AINC algorithms in \(\alpha=1.9\), where the simulation settings are the same as [147].

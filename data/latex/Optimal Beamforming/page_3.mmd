@@ -1,0 +1,25 @@
+### Minimum Mean Squared Error
+
+The minimum mean squared error (MMSE) algorithm minimizes the error _with respect to a reference signal_\(d(t)\). In this model, the desired user is assumed to transmit this reference signal, i.e., \(\alpha=\beta d(t)\), where \(\beta\) is the signal amplitude and \(d(t)\) is known to the receiving base station. The output \(y(t)\) is required to track this reference signal. The MMSE finds the weights \(\mathbf{w}\) that minimize the average power in the error signal, the difference between the reference signal and the output signal obtained using Eqn. (3)
+
+\[\mathbf{w}_{\mathrm{MMSE}} = \arg\min_{\mathbf{w}}\mathrm{E}\left\{|e(t)|^{2}\right\}, \tag{6}\]
+
+where
+
+\[\mathrm{E}\left\{|e(t)|^{2}\right\} = \mathrm{E}\left\{\left|\mathbf{w}^{H}\mathbf{x}(t)-d(t)\right|^{2 }\right\}, \tag{7}\] \[= \mathrm{E}\left\{\mathbf{w}^{H}\mathbf{x}\mathbf{x}^{H}\mathbf{w }-\mathbf{w}^{H}\mathbf{x}d^{*}-\mathbf{x}^{H}\mathbf{w}d+dd^{*}\right\},\] \[= \mathbf{w}^{H}\mathbf{R}\mathbf{w}-\mathbf{w}^{H}\mathbf{r}_{xd }-\mathbf{r}_{xd}^{H}\mathbf{w}+dd^{*},\]
+
+where
+
+\[\mathbf{r}_{xd}=\mathrm{E}\left\{\mathbf{x}d^{*}\right\}. \tag{8}\]
+
+To find the minimum of this functional, we take its derivative with respect to \(\mathbf{w}^{H}\) (we have seen before that we can treat \(\mathbf{w}\) and \(\mathbf{w}^{H}\) as independent variables).
+
+\[\frac{\partial\mathrm{E}\left\{|e(t)|^{2}\right\}}{\partial \mathbf{w}^{H}} = \mathbf{R}\mathbf{w}-\mathbf{r}_{xd}=0,\] \[\Rightarrow\mathbf{w}_{\mathrm{MMSE}} = \mathbf{R}^{-1}\mathbf{r}_{xd}. \tag{9}\]
+
+This solution is also commonly known as the _Wiener filter_.
+
+We emphasize that the MMSE technique minimizes the error with respect to a reference signal. This technique, therefore, does not require knowledge of the spatial signature \(\mathbf{h}_{0}\), but does require knowledge of the transmitted signal. This is an example of a _training based scheme_: the reference signal acts to train the beamformer weights.
+
+### Minimum Output Energy
+
+The minimum output energy (MOE) beamformer defines a different optimality criterion: we minimize the total output energy while _simultaneously_ keeping the gain of the array on the desired signal fixed. Because the gain on the signal is fixed, any reduction in the output energy is obtained

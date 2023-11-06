@@ -2,8 +2,6 @@
 
 For details on corpus construction, see the accompanying notebook."""
 import modal
-from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
 
 import vecstore
 from utils import pretty_log
@@ -44,7 +42,7 @@ stub = modal.Stub(
     mounts=[
         # we make our local modules available to the container
         modal.Mount.from_local_python_packages(
-            "vecstore", "docstore", "utils", "prompts"
+            "vecstore", "docstore", "utils", "prompts", "prompts_trafo"
         )
     ],
 )
@@ -90,35 +88,6 @@ def drop_docs(collection: str = None, db: str = None):
     import docstore
 
     docstore.drop(collection, db)
-
-
-def log_event(query: str, sources, answer: str, request_id=None):
-    """Logs the event to Gantry."""
-    import os
-    import gantry
-
-    if not os.environ.get("GANTRY_API_KEY"):
-        pretty_log("No Gantry API key found, skipping logging")
-        return None
-
-    gantry.init(api_key=os.environ["GANTRY_API_KEY"], environment="modal")
-
-    application = "ask-fsdl"
-    join_key = str(request_id) if request_id else None
-
-    inputs = {"question": query}
-    inputs["docs"] = "\n\n---\n\n".join(source.page_content for source in sources)
-    inputs["sources"] = "\n\n---\n\n".join(
-        source.metadata["source"] for source in sources
-    )
-    outputs = {"answer_text": answer}
-
-    record_key = gantry.log_record(
-        application=application, inputs=inputs, outputs=outputs, join_key=join_key
-    )
-
-    return record_key
-
 
 def prep_documents_for_vector_storage_pdf(documents):
     """Prepare documents from document store for embedding and vector storage.
@@ -197,7 +166,6 @@ def cli(query: str):
     network_file_systems={
         str(VECTOR_DIR): vector_storage,
     },
-    keep_warm=1,
 )
 def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
     """Runs sourced Q&A for a query using LangChain.
@@ -210,7 +178,7 @@ def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
     from langchain.chains.qa_with_sources import load_qa_with_sources_chain
     from langchain.chat_models import ChatOpenAI
 
-    import prompts
+    import prompts_trafo
     import vecstore
 
     embedding_engine = vecstore.get_embedding_engine(allowed_special="all")
@@ -235,7 +203,7 @@ def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
         llm,
         chain_type="stuff",
         verbose=with_logging,
-        prompt=prompts.main,
+        prompt=prompts_trafo.main,
         document_variable_name="sources",
     )
 
@@ -243,13 +211,6 @@ def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
         {"input_documents": sources, "question": query}, return_only_outputs=True
     )
     answer = result["output_text"]
-
-    if with_logging:
-        print(answer)
-        pretty_log("logging results to gantry")
-        record_key = log_event(query, sources, answer, request_id=request_id)
-        if record_key:
-            pretty_log(f"logged to gantry with key {record_key}")
 
     return answer
 
@@ -280,9 +241,10 @@ def web(request:dict):
         pretty_log(
         f"handling request: {query}"
     )
-    answer = qanda(
+    answer = qanda.remote(
         query,
         request_id=request_id
     )
 
+    pretty_log('query: {query}\nanswer: {answer}')
     return {"query": query, "answer": answer}

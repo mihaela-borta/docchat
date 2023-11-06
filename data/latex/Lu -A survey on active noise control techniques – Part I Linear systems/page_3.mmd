@@ -1,0 +1,7 @@
+both online and offline estimation methods and demonstrated improved modeling accuracy.
+
+Another ANC system model employs the feedback strategy. In contrast with the feedforward ANC system, the feedback ANC system does not need the _a priori_ information picked up by the reference microphone, and the attenuated noise level only depends on the active loudspeaker, the adaptive controller, and the error microphone [19]. Moreover, it is not affected by multiple noise sources [20]. The block diagram of the feedback ANC system is shown in Fig. 2. The feedback structure delivers a significantly lower implementation cost, but its drawbacks are also obvious. The main drawback is the stability problem, similar to the infinite impulse response (IIR) filter. The second weakness is the 'waterbed effect' which implies that it is theoretically impossible to suppress noise simultaneously at all frequencies. If the noise at some frequencies is suppressed in a feedback ANC system, the noise will be increased at some other frequencies [21]. Furthermore, the noise attenuation bandwidth is typically limited. Thus, few feedback ANC systems involve controlling broadband noise, such as chaotic noise and random noise [19; 20]. A vast number of efforts have been developed to solve these limitations, e.g., see [19; 21; 20].
+
+Figure 3: Diagram of hybrid ANC model.
+
+Figure 2: Diagram of the feedback ANC model.

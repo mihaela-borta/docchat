@@ -60,4 +60,4 @@ fi
 #modal run etl/pdfs.py --json-path data/llm-papers.json --db "$db" --collection "$collection"
 
 pretty_log "Loading Latex documents"
-modal run etl/latex.py --dir-path data/latex --db "$db" --collection "$collection"
+modal run etl/latex.py --main-dir-path data/latex --db "$db" --collection "$collection"
