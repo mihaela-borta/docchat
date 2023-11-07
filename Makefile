@@ -27,16 +27,22 @@ help: logo ## get a list of all the targets, and their short descriptions
 it-all: logo document-store vector-index backend frontend ## runs automated deployment steps
 
 
-frontend: create-bot-client ## deploy the Discord bot on Modal
+frontend: slash-command#create-bot-client ## deploy the Discord bot on Modal
 	MODAL_ENVIRONMENT=$(ENV) bash tasks/run_frontend_modal.sh deploy
 
-serve-frontend: create-bot-client ## run the Discord bot as a hot-reloading "dev" server on Modal
+serve-frontend: slash-command#create-bot-client ## run the Discord bot as a hot-reloading "dev" server on Modal
 	MODAL_ENVIRONMENT=$(ENV) bash tasks/run_frontend_modal.sh serve
 
 create-bot-client: frontend-secrets ## register the bot's slash command with Discord
 	@tasks/pretty_log.sh "Assumes you've set up your bot in Discord"
 	MODAL_ENVIRONMENT=$(ENV) modal run bot::start_client
-	@tasks/pretty_log.sh "Sterted bot client."
+	@tasks/pretty_log.sh "Started bot client."
+
+slash-command: frontend-secrets ## register the bot's slash command with Discord
+	@tasks/pretty_log.sh "Assumes you've set up your bot in Discord"
+	MODAL_ENVIRONMENT=$(ENV) modal run bot::create_slash_command
+	@tasks/pretty_log.sh "Slash command registered."
+
 
 backend: secrets ## deploy the Q&A backend on Modal
 	@tasks/pretty_log.sh "Assumes you've set up the vector index, see vector-index"
