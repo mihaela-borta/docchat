@@ -50,7 +50,7 @@ def app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    @app.post("/interactions") #'https://mihaela-borta-docchat--docchat-discord-bot-dev.modal.run/'
+    @app.post("/interactions") #For this you need to register an interactions URL in Discord. Te base is the URL which modal generates for your fronted
     async def handle_request(request: Request):
         "Verify incoming requests and if they're a valid command spawn a response."
 
