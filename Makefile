@@ -30,7 +30,7 @@ it-all: logo document-store vector-index backend frontend ## runs automated depl
 frontend: slash-command#create-bot-client ## deploy the Discord bot on Modal
 	MODAL_ENVIRONMENT=$(ENV) bash tasks/run_frontend_modal.sh deploy
 
-serve-frontend: slash-command#create-bot-client ## run the Discord bot as a hot-reloading "dev" server on Modal
+serve-frontend: #slash-command#create-bot-client ## run the Discord bot as a hot-reloading "dev" server on Modal
 	MODAL_ENVIRONMENT=$(ENV) bash tasks/run_frontend_modal.sh serve
 
 create-bot-client: frontend-secrets ## register the bot's slash command with Discord

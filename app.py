@@ -156,7 +156,7 @@ def prep_documents_for_vector_storage(documents):
     },
 )
 def cli(query: str):
-    answer = qanda.remote(query, with_logging=False)
+    answer = qanda.remote(query, with_logging=True)
     pretty_log("🦜 ANSWER 🦜")
     print(answer)
 
@@ -248,3 +248,34 @@ def web(request:dict):
 
     pretty_log('query: {query}\nanswer: {answer}')
     return {"query": query, "answer": answer}
+
+
+
+
+'''
+from aiohttp import web
+
+async def handle_requests(request: web.Request) -> web.Response:
+    text = 'Hello World!'
+    if 'text' in request.query:
+        text = "\t".join(request.query.getall("text"))
+    try:
+        await send_to_slack(channel="#random", text=text)
+        return web.json_response(data={'message': 'Done!'})
+    except SlackApiError as e:
+        return web.json_response(data={'message': f"Failed due to {e.response['error']}"})
+'''
+
+
+### How to handle the slack frontend?
+# 1. Create a slack app
+# 2. Add a slash command
+# 3. Add a request url
+# 4. Add a bot user
+# 5. Add a bot user token
+# 6. Add a bot user token to Modal
+# 7. Add a bot user token to Gantry
+# 8. Add a bot user token to Slack
+# 9. Add a bot user token to the slack app
+# 10. Add a bot user token to the slack app
+# 11. Add

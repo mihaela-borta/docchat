@@ -4,34 +4,74 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import aiohttp
 import json
+import hashlib
+import hmac
 
 from modal import Image, Mount, Secret, Stub, asgi_app
 
 from utils import pretty_log
 
-image = Image.debian_slim(python_version="3.10").pip_install("pynacl", "requests")
-discord_secrets = [Secret.from_name("docchat-frontend-secret")]
+image = Image.debian_slim(python_version="3.10").pip_install("pynacl", "requests", "slack_sdk")
+slack_secrets = [Secret.from_name("docchat-frontend-slack-secret")]
+
+#https://mihaela-borta-docchat--docchat-discord-bot.modal.run/interactions
+#https://mihaela-borta-docchat--docchat-slack-bot_slack.modal.run/events
+# https://mihaela-borta-dev--docchat-discord-bot-dev.modal.run
+#f"https://{MODAL_USER_NAME}-{MODAL_ENVIRONMENT}--{MODAL_FRONTEND_NAME}-{MODULE_NAME}.modal.run/slack/events"
+
+
 
 stub = Stub(
-    "docchat-discord",
+    "docchat-slack",
     image=image,
-    secrets=discord_secrets,
+    secrets=slack_secrets,
     mounts=[Mount.from_local_python_packages("utils")],
 )
 
 
-class DiscordInteractionType(Enum):
-    PING = 1  # hello from Discord
+class SlackInteractionType(Enum):
+    PING = 1  # hello from Slack
     APPLICATION_COMMAND = 2  # an actual command
 
 
-class DiscordResponseType(Enum):
+class SlackResponseType(Enum):
     PONG = 1  # hello back
     DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE = 5  # we'll send a message later
 
 
-class DiscordApplicationCommandOptionType(Enum):
+class SlackApplicationCommandOptionType(Enum):
     STRING = 3  # with language models, strings are all you need
+
+from slack_sdk.web.async_client import AsyncWebClient
+from slack_sdk.errors import SlackApiError
+
+
+
+async def verify(request: Request):
+    """Verify that the request is from Slack."""
+    signing_secret = os.environ.get("SLACK_SIGNING_SECRET")
+
+    pretty_log(f'signing_secret {signing_secret}')
+    #pretty_log(f"slack_secrets['SLACK_SIGNING_SECRET'] {slack_secrets['SLACK_SIGNING_SECRET']}")
+
+    body = await request.body()
+
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    slack_signature = request.headers.get('X-Slack-Signature')
+
+    # Create a basestring by concatenating timestamp and request body
+    basestring = f'v0:{timestamp}:{body}'.encode('utf-8')
+
+    # Calculate the HMAC-SHA256 hash using the signing secret
+    signature = 'v0=' + hmac.new(signing_secret.encode('utf-8'), basestring, hashlib.sha256).hexdigest()
+
+    # Compare the calculated signature with the incoming signature
+    if not hmac.compare_digest(signature, slack_signature):
+        pretty_log('Signature not matching')
+        raise HTTPException(status_code=401, detail="Invalid request") from None
+    
+    return body
+
 
 
 @stub.function(
@@ -39,11 +79,11 @@ class DiscordApplicationCommandOptionType(Enum):
     # this costs ~$3/month at current prices, so well within $10/month free tier credit
     keep_warm=1,
 )
-@asgi_app(label="docchat-discord-bot")
+@asgi_app(label="docchat-slack-bot")
 def app() -> FastAPI:
     app = FastAPI()
 
-    print('Hello from Discord!')
+    print('Hello from Slack!')
 
     app.add_middleware(
         CORSMiddleware,
@@ -52,29 +92,27 @@ def app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    @app.post("/interactions") #For this you need to register an interactions URL in Discord. Te base is the URL which modal generates for your fronted
+    @app.post("/slack/events") #For this you need to register an events URL in Slack. Te base is the URL which modal generates for your fronted
     async def handle_request(request: Request):
         "Verify incoming requests and if they're a valid command spawn a response."
 
-        # while loading the body, check that it's a valid request from Discord
+        # while loading the body, check that it's a valid request from Slack
         body = await verify(request)
         data = json.loads(body.decode())
 
-        pretty_log(f'!!!! VERIFYIED REQUEST: {data}')
+        pretty_log(f"!!!! SLACK Request: {data}")
+        '''
+        if data.get("type") == SlackInteractionType.PING.value:
+            # "ack"nowledge the ping from Slack
+            return {"type": SlackResponseType.PONG.value}
 
-        if data.get("type") == DiscordInteractionType.PING.value:
-            # "ack"nowledge the ping from Discord
-            return {"type": DiscordResponseType.PONG.value}
-
-        if data.get("type") == DiscordInteractionType.APPLICATION_COMMAND.value:
+        if data.get("type") == SlackInteractionType.APPLICATION_COMMAND.value:
             # this is a command interaction
             app_id = data["application_id"]
             interaction_token = data["token"]
             user_id = data["member"]["user"]["id"]
 
             question = data["data"]["options"][0]["value"]
-            pretty_log(f'!!!!Processing command: {question}')
-
             # kick off our actual response in the background
             respond.spawn(
                 question,
@@ -83,12 +121,14 @@ def app() -> FastAPI:
                 user_id,
             )
 
-            # and respond immediately to let Discord know we're on the case
+            # and respond immediately to let Slack know we're on the case
             return {
-                "type": DiscordResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE.value
+                "type": SlackResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE.value
             }
 
         raise HTTPException(status_code=400, detail="Bad request")
+    
+        '''
 
     return app
 
@@ -176,32 +216,10 @@ async def send_response(
             await resp.text()
 
 
-async def verify(request: Request):
-    """Verify that the request is from Discord."""
-
-    from nacl.signing import VerifyKey
-    from nacl.exceptions import BadSignatureError
-
-    public_key = os.getenv("DISCORD_PUBLIC_KEY")
-    verify_key = VerifyKey(bytes.fromhex(public_key))
-
-    signature = request.headers.get("X-Signature-Ed25519")
-    timestamp = request.headers.get("X-Signature-Timestamp")
-    body = await request.body()
-
-    message = timestamp.encode() + body
-    try:
-        verify_key.verify(message, bytes.fromhex(signature))
-    except BadSignatureError:
-        # IMPORTANT: if you let bad signatures through,
-        # Discord will refuse to talk to you
-        raise HTTPException(status_code=401, detail="Invalid request") from None
-
-    return body
 
 
 def construct_response(raw_response: str, user_id: str, question: str) -> str:
-    """Wraps the backend's response in a nice message for Discord."""
+    """Wraps the backend's response in a nice message for Slack."""
     rating_emojis = {
         "👍": "if the response was helpful",
         "👎": "if the response was not helpful",
@@ -245,7 +263,7 @@ def construct_error_message(user_id: str) -> str:
 
 @stub.function()
 def create_slash_command(force: bool = True):
-    """Registers the slash command with Discord. Pass the force flag to re-register."""
+    """Registers the slash command with Slack. Pass the force flag to re-register."""
     import os
     import requests
 
@@ -267,7 +285,7 @@ def create_slash_command(force: bool = True):
             {
                 "name": "question",
                 "description": "A question about topics relevant for someone studying a masters in sound and music computing",
-                "type": DiscordApplicationCommandOptionType.STRING.value,
+                "type": SlackApplicationCommandOptionType.STRING.value,
                 "required": True,
                 "max_length": 200,
             }
