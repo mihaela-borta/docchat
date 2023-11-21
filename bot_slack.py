@@ -46,32 +46,29 @@ from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.errors import SlackApiError
 
 
-
 async def verify(request: Request):
     """Verify that the request is from Slack."""
     signing_secret = os.environ.get("SLACK_SIGNING_SECRET")
 
-    pretty_log(f'signing_secret {signing_secret}')
-    #pretty_log(f"slack_secrets['SLACK_SIGNING_SECRET'] {slack_secrets['SLACK_SIGNING_SECRET']}")
-
     body = await request.body()
-
-    timestamp = request.headers.get('X-Slack-Request-Timestamp')
+    timestamp = request.headers.get('X-Slack-Request-Timestamp')    
     slack_signature = request.headers.get('X-Slack-Signature')
 
     # Create a basestring by concatenating timestamp and request body
-    basestring = f'v0:{timestamp}:{body}'.encode('utf-8')
+    basestring = f'v0:{timestamp}:{body.decode("utf-8")}'
 
     # Calculate the HMAC-SHA256 hash using the signing secret
-    signature = 'v0=' + hmac.new(signing_secret.encode('utf-8'), basestring, hashlib.sha256).hexdigest()
-
+    signature = 'v0=' + hmac.new(
+        signing_secret.encode(),
+        basestring.encode(),
+        hashlib.sha256).hexdigest()
+    
     # Compare the calculated signature with the incoming signature
     if not hmac.compare_digest(signature, slack_signature):
-        pretty_log('Signature not matching')
+        pretty_log(f'Signature not matching:\nbasestring: {basestring}\nsignature: {signature}\nslack_signature: {slack_signature}')
         raise HTTPException(status_code=401, detail="Invalid request") from None
     
     return body
-
 
 
 @stub.function(
@@ -98,7 +95,13 @@ def app() -> FastAPI:
 
         # while loading the body, check that it's a valid request from Slack
         body = await verify(request)
-        data = json.loads(body.decode())
+        pretty_log(f"Slack Request Verified: {body}")
+        
+        import urllib.parse
+        data = body.decode('utf-8')
+        pretty_log(f"!!!! SLACK Request before JSON parsing: {data}")
+
+        data = urllib.parse.parse_qs(data)
 
         pretty_log(f"!!!! SLACK Request: {data}")
         '''
