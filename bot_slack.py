@@ -28,20 +28,6 @@ stub = Stub(
     mounts=[Mount.from_local_python_packages("utils")],
 )
 
-
-class SlackInteractionType(Enum):
-    PING = 1  # hello from Slack
-    APPLICATION_COMMAND = 2  # an actual command
-
-
-class SlackResponseType(Enum):
-    PONG = 1  # hello back
-    DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE = 5  # we'll send a message later
-
-
-class SlackApplicationCommandOptionType(Enum):
-    STRING = 3  # with language models, strings are all you need
-
 from slack_sdk.web.async_client import AsyncWebClient
 from slack_sdk.errors import SlackApiError
 
@@ -92,48 +78,98 @@ def app() -> FastAPI:
     @app.post("/slack/events") #For this you need to register an events URL in Slack. Te base is the URL which modal generates for your fronted
     async def handle_request(request: Request):
         "Verify incoming requests and if they're a valid command spawn a response."
-
-        # while loading the body, check that it's a valid request from Slack
-        body = await verify(request)
-        pretty_log(f"Slack Request Verified: {body}")
-        
         import urllib.parse
+        body = await verify(request)
         data = body.decode('utf-8')
-        pretty_log(f"!!!! SLACK Request before JSON parsing: {data}")
-
         data = urllib.parse.parse_qs(data)
+        question = data["text"][0]
+        user_name = data["user_name"][0]
+        command = data["command"][0]
+        channel_name = data["channel_name"][0]
+        channel_id = data["channel_id"][0]
+        #app_id = data["api_app_id"]
+        token = os.environ.get('SLACK_BOT_TOKEN')
 
-        pretty_log(f"!!!! SLACK Request: {data}")
+        pretty_log(f'channel_id: {channel_id} user_name: {user_name} question: {question}')
+
+        if command == "/ask":
+            respond.spawn(
+                question,
+                channel_id,
+                user_name,
+                token,
+            )
+            
         '''
-        if data.get("type") == SlackInteractionType.PING.value:
-            # "ack"nowledge the ping from Slack
-            return {"type": SlackResponseType.PONG.value}
+            async with AsyncWebClient(token=token) as web_client:
+                try:
+                    # Craft your response message
+                    response_text = "This is a response to the command /ask!"
 
-        if data.get("type") == SlackInteractionType.APPLICATION_COMMAND.value:
-            # this is a command interaction
-            app_id = data["application_id"]
-            interaction_token = data["token"]
-            user_id = data["member"]["user"]["id"]
+                    # Send the response to the channel where the command originated
+                    await web_client.chat_postMessage(
+                        channel=channel_name,
+                        text=response_text,
+                    )
+                except SlackApiError as e:
+                    pretty_log(f"Error posting message: {e.response['error']}")
 
-            question = data["data"]["options"][0]["value"]
-            # kick off our actual response in the background
+                    
+        pretty_log(f"!!!! SLACK Request: {data}")
+        
+            
             respond.spawn(
                 question,
                 app_id,
                 interaction_token,
                 user_id,
             )
-
-            # and respond immediately to let Slack know we're on the case
-            return {
-                "type": SlackResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE.value
-            }
-
-        raise HTTPException(status_code=400, detail="Bad request")
+    
     
         '''
-
     return app
+    
+
+
+@stub.function()
+async def respond(
+    message: str,
+    channel_id: str,
+    user_name: str,
+    bot_token: str,
+): 
+    
+    try:
+        response = message #await send_request_to_backend(question)
+    except Exception as e:
+        pretty_log("Error", e)
+        response = construct_error_message(user_name)
+    await send_message(response, channel_id, bot_token)
+
+
+async def send_message(
+    message: str,
+    channel_id: str,
+    bot_token: str,
+):
+    """Send a message to Slack."""
+    url = f"https://slack.com/api/chat.postMessage"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {bot_token}'
+    }
+    payload = {
+        'channel': channel_id,
+        'text': message
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, headers=headers, json=payload) as response:
+            if response.status == 200:
+                result = await response.json()
+                print("Message posted successfully:", result)
+            else:
+                print("Failed to post message:", response.status)
 
 
 
@@ -178,47 +214,6 @@ async def send_request_to_backend(query: str):
         pretty_log(f"Request failed. Response: {response}")
         answer = "I dunno"
     return answer
-
-
-@stub.function()
-async def respond(
-    question: str,
-    application_id: str,
-    interaction_token: str,
-    user_id: str,
-): 
-    
-    try:
-        response = await send_request_to_backend(question)
-    except Exception as e:
-        pretty_log("Error", e)
-        response = construct_error_message(user_id)
-    await send_response(response, application_id, interaction_token)    
-
-
-async def send_response(
-    response: str,
-    application_id: str,
-    interaction_token: str,
-):
-    """Send a response to the user interaction."""
-
-    interaction_url = (
-        f"https://discord.com/api/v10/webhooks/{application_id}/{interaction_token}"
-    )
-
-    json_payload = {"content": f"{response}"}
-
-    payload = aiohttp.FormData()
-    payload.add_field(
-        "payload_json", json.dumps(json_payload), content_type="application/json"
-    )
-
-    async with aiohttp.ClientSession() as session:
-        async with session.post(interaction_url, data=payload) as resp:
-            await resp.text()
-
-
 
 
 def construct_response(raw_response: str, user_id: str, question: str) -> str:

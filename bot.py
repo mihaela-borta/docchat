@@ -150,7 +150,7 @@ async def respond(
     except Exception as e:
         pretty_log("Error", e)
         response = construct_error_message(user_id)
-    await send_response(response, application_id, interaction_token)    
+    await send_response(response, application_id, interaction_token)
 
 
 async def send_response(
