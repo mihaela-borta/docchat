@@ -5,13 +5,15 @@ import os
 import aiohttp
 import json
 import hashlib
+import requests
+import urllib.parse
 import hmac
 
 from modal import Image, Mount, Secret, Stub, asgi_app
 
 from utils import pretty_log
 
-image = Image.debian_slim(python_version="3.10").pip_install("pynacl", "requests", "slack_sdk")
+image = Image.debian_slim(python_version="3.10").pip_install("pynacl", "requests")
 slack_secrets = [Secret.from_name("docchat-frontend-slack-secret")]
 
 #https://mihaela-borta-docchat--docchat-discord-bot.modal.run/interactions
@@ -27,10 +29,6 @@ stub = Stub(
     secrets=slack_secrets,
     mounts=[Mount.from_local_python_packages("utils")],
 )
-
-from slack_sdk.web.async_client import AsyncWebClient
-from slack_sdk.errors import SlackApiError
-
 
 async def verify(request: Request):
     """Verify that the request is from Slack."""
@@ -78,7 +76,6 @@ def app() -> FastAPI:
     @app.post("/slack/events") #For this you need to register an events URL in Slack. Te base is the URL which modal generates for your fronted
     async def handle_request(request: Request):
         "Verify incoming requests and if they're a valid command spawn a response."
-        import urllib.parse
         body = await verify(request)
         data = body.decode('utf-8')
         data = urllib.parse.parse_qs(data)
@@ -87,7 +84,6 @@ def app() -> FastAPI:
         command = data["command"][0]
         channel_name = data["channel_name"][0]
         channel_id = data["channel_id"][0]
-        #app_id = data["api_app_id"]
         token = os.environ.get('SLACK_BOT_TOKEN')
 
         pretty_log(f'channel_id: {channel_id} user_name: {user_name} question: {question}')
@@ -99,48 +95,19 @@ def app() -> FastAPI:
                 user_name,
                 token,
             )
-            
-        '''
-            async with AsyncWebClient(token=token) as web_client:
-                try:
-                    # Craft your response message
-                    response_text = "This is a response to the command /ask!"
-
-                    # Send the response to the channel where the command originated
-                    await web_client.chat_postMessage(
-                        channel=channel_name,
-                        text=response_text,
-                    )
-                except SlackApiError as e:
-                    pretty_log(f"Error posting message: {e.response['error']}")
-
-                    
-        pretty_log(f"!!!! SLACK Request: {data}")
-        
-            
-            respond.spawn(
-                question,
-                app_id,
-                interaction_token,
-                user_id,
-            )
-    
-    
-        '''
     return app
     
 
-
 @stub.function()
 async def respond(
-    message: str,
+    question: str,
     channel_id: str,
     user_name: str,
     bot_token: str,
 ): 
-    
     try:
-        response = message #await send_request_to_backend(question)
+        raw_response = await send_request_to_backend(question)
+        response = construct_response(raw_response, user_name, question)
     except Exception as e:
         pretty_log("Error", e)
         response = construct_error_message(user_name)
@@ -191,9 +158,6 @@ def generate_backend_url():
 
 
 async def send_request_to_backend(query: str):
-    import requests
-    import json
-
     url = generate_backend_url()
     headers = {"Content-Type": "application/json"}
     data = json.dumps({"query": query})
@@ -258,7 +222,7 @@ def construct_error_message(user_id: str) -> str:
     error_message += "*"
     return error_message
 
-
+'''
 @stub.function()
 def create_slash_command(force: bool = True):
     """Registers the slash command with Slack. Pass the force flag to re-register."""
@@ -310,3 +274,4 @@ def create_slash_command(force: bool = True):
         response.raise_for_status()
     except Exception as e:
         raise Exception("Failed to create slash command") from e
+'''

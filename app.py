@@ -176,6 +176,7 @@ def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
         with_logging: If True, logs the interaction to Gantry.
     """
     from langchain.chains.qa_with_sources import load_qa_with_sources_chain
+    from langchain.chains import LLMCheckerChain, SimpleSequentialChain
     from langchain.chat_models import ChatOpenAI
 
     import prompts_trafo
@@ -198,8 +199,8 @@ def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
 
     pretty_log("running query against Q&A chain")
 
-    llm = ChatOpenAI(temperature=0, max_tokens=256) #model_name="gpt",
-    chain = load_qa_with_sources_chain(
+    llm = ChatOpenAI(temperature=0.2, max_tokens=256) #model_name="gpt", #initially: 0
+    qa_chain = load_qa_with_sources_chain(
         llm,
         chain_type="stuff",
         verbose=with_logging,
@@ -207,10 +208,21 @@ def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
         document_variable_name="sources",
     )
 
-    result = chain(
+    result = qa_chain(
         {"input_documents": sources, "question": query}, return_only_outputs=True
     )
     answer = result["output_text"]
+    
+
+    review_chain = LLMCheckerChain.from_llm(llm, verbose=True)
+
+
+    overall_chain = SimpleSequentialChain(
+        chains=[qa_chain, review_chain], verbose=True
+    )
+
+
+    #checker_chain.run(text)
 
     return answer
 
