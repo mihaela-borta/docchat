@@ -38,10 +38,10 @@ create-bot-client: frontend-secrets ## register the bot's slash command with Dis
 	MODAL_ENVIRONMENT=$(ENV) modal run bot::start_client
 	@tasks/pretty_log.sh "Started bot client."
 
-#slash-command: frontend-secrets ## register the bot's slash command with Discord
-#	@tasks/pretty_log.sh "Assumes you've set up your bot in Discord"
-#	MODAL_ENVIRONMENT=$(ENV) modal run bot::create_slash_command
-#	@tasks/pretty_log.sh "Slash command registered."
+slash-command: frontend-secrets ## register the bot's slash command with Discord
+	@tasks/pretty_log.sh "Assumes you've set up your bot in Discord"
+	MODAL_ENVIRONMENT=$(ENV) modal run bot::create_slash_command
+	@tasks/pretty_log.sh "Slash command registered."
 
 
 backend: secrets ## deploy the Q&A backend on Modal

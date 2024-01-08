@@ -3,4 +3,3 @@ modal-client~=0.50
 jupyter
 discord==2.3.2
 requests
-slack_sdk

@@ -2,10 +2,10 @@
 
 For details on corpus construction, see the accompanying notebook."""
 import modal
+from pathlib import Path
 
 import vecstore
 from utils import pretty_log
-
 
 # definition of our container image for jobs on Modal
 # Modal gets really powerful when you start using multiple images!
@@ -22,10 +22,13 @@ image = modal.Image.debian_slim(  # we start from a lightweight linux distro
     # vector storage and similarity search
     "pymongo[srv]==3.11",
     # python client for MongoDB, our data persistence solution
-    "gradio~=3.34",
-    # simple web UIs in Python, from 🤗
-    "gantry==0.5.6",
     # 🏗️: monitoring, observability, and continual improvement for ML systems
+    "pandas==2.1.4",
+    "google-cloud-bigquery==3.10",
+    "google-auth==2.17.3",
+    "db-dtypes==1.2.0",
+    "tomli==2.0.1",
+    "tzlocal==5.2",
 )
 
 # we define a Stub to hold all the pieces of our app
@@ -37,19 +40,20 @@ stub = modal.Stub(
         # this is where we add API keys, passwords, and URLs, which are stored on Modal
         modal.Secret.from_name("mongodb-fsdl"),
         modal.Secret.from_name("openai-api-key-fsdl"),
-        modal.Secret.from_name("gantry-api-key-fsdl"),
+        modal.Secret.from_name("bigquery_dataset"),
     ],
     mounts=[
         # we make our local modules available to the container
         modal.Mount.from_local_python_packages(
-            "vecstore", "docstore", "utils", "prompts", "prompts_trafo"
-        )
+            "vecstore", "docstore", "utils", "prompts",
+            "analytics_db.bigquery_utils", "analytics_db.table_schemas",
+        ),
+        modal.Mount.from_local_dir("./config", remote_path="/root/config"),
     ],
 )
 
 VECTOR_DIR = vecstore.VECTOR_DIR
 vector_storage = modal.NetworkFileSystem.persisted("vector-vol")
-
 
 @stub.function(
     image=image,
@@ -103,10 +107,7 @@ def prep_documents_for_vector_storage_pdf(documents):
         chunk_size=500, chunk_overlap=100, allowed_special="all"
     )
     ids, texts, metadatas = [], [], []
-    pretty_log("🦜 DOCUMENT 🦜")
-    print(type(documents[0]))   
-    print(documents[0])
-    for document in documents[:1]:
+    for document in documents:
         text, metadata = document["text"], document["metadata"]
         doc_texts = text_splitter.split_text(text)
         doc_metadatas = [metadata] * len(doc_texts)
@@ -128,14 +129,10 @@ def prep_documents_for_vector_storage(documents):
     from langchain.text_splitter import LatexTextSplitter
 
     text_splitter = LatexTextSplitter.from_tiktoken_encoder(
-            chunk_size=500, chunk_overlap=100, allowed_special="all"
+            chunk_size=250, chunk_overlap=100, allowed_special="all"
         )
 
     ids, texts, metadatas = [], [], []
-    pretty_log("🦜 DOCUMENT 🦜")
-    print(type(documents[0]))   
-    print(documents[0])
-    i = 0
     for document in documents:
         text, metadata = document["text"], document["metadata"]
         doc_texts = text_splitter.split_text(text)
@@ -143,10 +140,8 @@ def prep_documents_for_vector_storage(documents):
         ids += [metadata.get("sha256")] * len(doc_texts)
         texts += doc_texts
         metadatas += doc_metadatas
-        i+=1
-
+        
     return ids, texts, metadatas
-
 
 
 @stub.function(
@@ -167,19 +162,18 @@ def cli(query: str):
         str(VECTOR_DIR): vector_storage,
     },
 )
-def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
+def qanda(query: str, with_logging: bool = True) -> str:
     """Runs sourced Q&A for a query using LangChain.
 
     Arguments:
         query: The query to run Q&A on.
-        request_id: A unique identifier for the request.
         with_logging: If True, logs the interaction to Gantry.
     """
     from langchain.chains.qa_with_sources import load_qa_with_sources_chain
     from langchain.chains import LLMCheckerChain, SimpleSequentialChain
     from langchain.chat_models import ChatOpenAI
 
-    import prompts_trafo
+    import prompts
     import vecstore
 
     embedding_engine = vecstore.get_embedding_engine(allowed_special="all")
@@ -193,7 +187,7 @@ def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
 
     pretty_log(f"running on query: {query}")
     pretty_log("selecting sources by similarity to query")
-    sources_and_scores = vector_index.similarity_search_with_score(query, k=3)
+    sources_and_scores = vector_index.similarity_search_with_score(query, k=1)
 
     sources, scores = zip(*sources_and_scores)
 
@@ -204,7 +198,7 @@ def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
         llm,
         chain_type="stuff",
         verbose=with_logging,
-        prompt=prompts_trafo.main,
+        prompt=prompts.main,
         document_variable_name="sources",
     )
 
@@ -212,19 +206,143 @@ def qanda(query: str, request_id=None, with_logging: bool = True) -> str:
         {"input_documents": sources, "question": query}, return_only_outputs=True
     )
     answer = result["output_text"]
-    
 
     review_chain = LLMCheckerChain.from_llm(llm, verbose=True)
-
 
     overall_chain = SimpleSequentialChain(
         chains=[qa_chain, review_chain], verbose=True
     )
 
-
     #checker_chain.run(text)
 
-    return answer
+    return answer, sources, scores
+
+
+def get_current_date_time():
+    from datetime import datetime
+    from tzlocal import get_localzone
+    import pytz    
+    import pandas as pd
+    crt_time = datetime.now(get_localzone())
+    crt_time = crt_time.astimezone(pytz.utc)
+    crt_date = crt_time.date()
+    crt_time = pd.Timestamp(crt_time.strftime("%Y-%m-%d %H:%M:%S"))
+    return crt_date, crt_time
+
+
+@stub.function(
+    image=image,
+)
+def log_qna(message_id, query, sources, scores, answer):
+    import pandas as pd
+    from analytics_db import table_schemas
+    from analytics_db.bigquery_utils import BigQueryConnector
+    
+    bq = BigQueryConnector()
+    
+    crt_date, crt_time = get_current_date_time()
+    
+    sources_data = []
+    for source, score in zip(sources, scores):
+        source_data = {
+            "content": source.page_content,  # Replace 'content' with your actual source data
+            "title": source.metadata['title'],
+            "page": int(source.metadata['page'].replace('.mmd', '')),
+            "score": score
+        }
+        sources_data.append(source_data)
+
+    df = pd.DataFrame({'ts': [crt_time],
+            'day': [crt_date],
+            'message_id': [message_id],
+            'query': [query],
+            'sources': [str(sources_data)],
+            'answer': [answer]})
+
+    table = "qa_logs"
+    job_duration, rows = bq.save_df_to_table(df, table, schema=getattr(table_schemas, table))
+    pretty_log(f"Inserted: {rows} rows in {table} in {job_duration} s")
+    
+
+@stub.function(
+    image=image,
+)
+def log_frontend_query_id(channel_id, user, message_id):
+    import pandas as pd
+    from analytics_db import table_schemas
+    from analytics_db.bigquery_utils import BigQueryConnector
+
+    bq = BigQueryConnector()
+
+    crt_date, crt_time = get_current_date_time()
+
+    df = pd.DataFrame({'ts': [crt_time],
+            'day': [crt_date],
+            'channel_id': [channel_id],
+            'user': [user],
+            'message_id': [message_id]})
+
+    table = "frontend_query_ids"
+    job_duration, rows = bq.save_df_to_table(df, table, schema=getattr(table_schemas, table))
+    pretty_log(f"Inserted: {rows} rows in {table} in {job_duration} s")
+
+
+@stub.function(
+    image=image,
+)
+def log_frontend_query_answer_ids(channel_id, query_id, answer_id):
+    import pandas as pd
+    from analytics_db import table_schemas
+    from analytics_db.bigquery_utils import BigQueryConnector
+
+    bq = BigQueryConnector()
+
+    crt_date, crt_time = get_current_date_time()
+
+    df = pd.DataFrame({'ts': [crt_time],
+            'day': [crt_date],
+            'channel_id': [channel_id],
+            'query_id': [query_id],
+            'answer_id': [answer_id]})
+
+    table = "frontend_qa_ids"
+    job_duration, rows = bq.save_df_to_table(df, table, schema=getattr(table_schemas, table))
+    pretty_log(f"Inserted: {rows} rows in {table} in {job_duration} s")
+
+
+@stub.function(
+    image=image,
+)
+def log_reaction(channel_id, message_id, emoji, count):
+    import pandas as pd
+    from analytics_db import table_schemas
+    from analytics_db.bigquery_utils import BigQueryConnector
+
+    bq = BigQueryConnector()
+
+    table = 'reactions'
+    dataset = stub.key_value_store['bq_dataset']
+
+    sql = f"""
+    SELECT * FROM {dataset}.{table} WHERE channel_id = '{channel_id}' AND message_id = '{message_id}'
+    """
+    df = bq.run_query(sql)
+    if df is not None and len(df) > 0:
+        pretty_log(f"Reaction for message {message_id} is already logged in the DB")
+        return
+
+    crt_date, crt_time = get_current_date_time()
+
+    df = pd.DataFrame({'ts': [crt_time],
+            'day': [crt_date],
+            'channel_id': [channel_id],
+            'message_id': [message_id],
+            'emoji': [emoji],
+            'count': [count]})
+    
+
+    job_duration, rows = bq.save_df_to_table(df, table, schema=getattr(table_schemas, table))
+    pretty_log(f"Inserted: {rows} rows in {table} in {job_duration} s")
 
 
 @stub.function(
@@ -238,56 +356,52 @@ def web(request:dict):
     """Exposes our Q&A chain for queries via a web endpoint.
     The name of this endpoint should match the MODAL_ENDPOINT_NAME environment variable as it is pick-up by the frontend.
     """
-    import os
+    
+    if 'request_type' in request.keys() and request['request_type'] == 'query':
+        answer, sources, scores = process_query_request(request)
+        query = request['query']
+        message_id = request['message_id']
+        log_qna.remote(message_id=message_id, query=query, sources=sources, scores=scores, answer=answer)
+        return answer
+    
+    elif 'request_type' in request.keys() and request['request_type'] == 'log_query':
+        channel_id, user, message_id = request["channel_id"], request["user"], request["message_id"]
+        log_frontend_query_id.remote(channel_id, user, message_id)
 
+    elif 'request_type' in request.keys() and request['request_type'] == 'log_query_answer':
+        channel_id, query_id, answer_id = request["channel_id"], request["query_id"], request["answer_id"]
+        log_frontend_query_answer_ids.remote(channel_id, query_id, answer_id)
+
+    elif 'request_type' in request.keys() and request['request_type'] == 'log_reaction':
+        channel_id, message_id = request["channel_id"], request["message_id"]
+        for reaction in request['reactions']:
+            emoji, count = reaction['emoji'], reaction['count']
+            log_reaction.remote(channel_id, message_id, emoji, count)
+
+
+def process_query_request(request):
+    import pandas as pd
     query = request['query']
     pretty_log(f"Received query: {query}")
-    
+
     request_id = request['request_id'] if 'request_id' in request.keys() else None
 
     if request_id:
-        pretty_log(
-        f"handling request with client-provided id: {request_id}"
-    )
+        pretty_log(f"handling request with client-provided id: {request_id}")
     else:
-        pretty_log(
-        f"handling request: {query}"
-    )
-    answer = qanda.remote(
-        query,
-        request_id=request_id
-    )
+        pretty_log(f"handling request: {query}")
+    
+    answer, sources, scores = qanda.remote(query)
 
-    pretty_log('query: {query}\nanswer: {answer}')
-    return {"query": query, "answer": answer}
+    if answer == 'No relevant sources found.':
+        df = pd.read_csv('data/abbreviations.csv')
+        def find_matching_keywords(text, keywords_df):
+            keywords_df['match'] = keywords_df['abbreviations'].apply(lambda x: x in text)
+        find_matching_keywords(query, df)
+        closest_match = df[df['match']==True].groupby(by=['file']).agg(list).reset_index()[['file', 'page', 'abbreviations']].head(100)
+        pretty_log(f'query: {query}\nanswer: {answer}\nclosest_match: {closest_match}')
 
+    else:
+        pretty_log(f'query: {query}\nanswer: {answer}\nscores:{scores}')
+    return answer, sources, scores
 
-
-
-'''
-from aiohttp import web
-
-async def handle_requests(request: web.Request) -> web.Response:
-    text = 'Hello World!'
-    if 'text' in request.query:
-        text = "\t".join(request.query.getall("text"))
-    try:
-        await send_to_slack(channel="#random", text=text)
-        return web.json_response(data={'message': 'Done!'})
-    except SlackApiError as e:
-        return web.json_response(data={'message': f"Failed due to {e.response['error']}"})
-'''
-
-
-### How to handle the slack frontend?
-# 1. Create a slack app
-# 2. Add a slash command
-# 3. Add a request url
-# 4. Add a bot user
-# 5. Add a bot user token
-# 6. Add a bot user token to Modal
-# 7. Add a bot user token to Gantry
-# 8. Add a bot user token to Slack
-# 9. Add a bot user token to the slack app
-# 10. Add a bot user token to the slack app
-# 11. Add

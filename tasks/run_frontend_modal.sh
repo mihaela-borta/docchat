@@ -10,8 +10,8 @@ source tasks/pretty_log.sh
 
 if [ "$style" = "deploy" ]; then
     pretty_log "Deploying app"
-    modal deploy bot_slack
+    modal deploy bot
 else
     pretty_log "Serving app -- changes to local files will trigger update"
-    modal serve bot_slack
+    modal serve bot
 fi
